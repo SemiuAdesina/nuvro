@@ -1,0 +1,24 @@
+get:
+  tags:
+    - Operations
+  operationId: getReadiness
+  summary: Report whether the process can serve requests
+  description: |
+    Consults every registered component probe. Component failure detail is deliberately
+    reduced to an up or down status so that the probe never leaks connection strings,
+    credentials or provider errors.
+  responses:
+    '200':
+      description: Every component is available.
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/readiness.yaml'
+    '503':
+      description: At least one component is unavailable.
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/readiness.yaml'
+    '500':
+      $ref: '../components/responses/internal-error.yaml'

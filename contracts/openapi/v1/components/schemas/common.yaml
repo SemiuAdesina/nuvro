@@ -1,0 +1,69 @@
+GeoPoint:
+  type: object
+  additionalProperties: false
+  required: [latitude, longitude]
+  properties:
+    latitude:
+      type: number
+      minimum: -90
+      maximum: 90
+    longitude:
+      type: number
+      minimum: -180
+      maximum: 180
+DateRange:
+  type: object
+  additionalProperties: false
+  required: [startDate, endDate]
+  description: Inclusive calendar dates; endDate must not precede startDate.
+  properties:
+    startDate:
+      type: string
+      format: date
+    endDate:
+      type: string
+      format: date
+TimeRange:
+  type: object
+  additionalProperties: false
+  required: [startAt, endAt, timezone]
+  properties:
+    startAt:
+      type: string
+      format: date-time
+    endAt:
+      type: string
+      format: date-time
+    timezone:
+      type: string
+      minLength: 1
+      description: IANA timezone identifier for local presentation
+Freshness:
+  type: object
+  additionalProperties: false
+  required: [observedAt, validUntil, status]
+  properties:
+    observedAt:
+      type: string
+      format: date-time
+    validUntil:
+      type: string
+      format: date-time
+    status:
+      type: string
+      enum: [live, cached, stale]
+Attribution:
+  type: object
+  additionalProperties: false
+  required: [text, provider]
+  description: Provider content credit that clients must display verbatim
+  properties:
+    text:
+      type: string
+      minLength: 1
+    uri:
+      type: string
+      format: uri
+    provider:
+      type: string
+      minLength: 1

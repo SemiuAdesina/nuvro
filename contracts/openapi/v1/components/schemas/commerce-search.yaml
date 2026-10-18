@@ -1,0 +1,159 @@
+FlightSearchRequest:
+  type: object
+  additionalProperties: false
+  required: [origin, destination, departDate]
+  properties:
+    origin:
+      type: string
+      pattern: '^[A-Z]{3}$'
+    destination:
+      type: string
+      pattern: '^[A-Z]{3}$'
+    departDate:
+      type: string
+      format: date
+    returnDate:
+      type: string
+      format: date
+    cabin:
+      type: string
+      enum: [economy, premium_economy, business, first]
+    budget:
+      $ref: './money.yaml'
+    maximumMinutes:
+      type: integer
+      minimum: 0
+      maximum: 2880
+    preferFewerStops:
+      type: boolean
+FlightSearchResponse:
+  type: object
+  additionalProperties: false
+  required: [offers, status, disclosure]
+  properties:
+    offers:
+      type: array
+      maxItems: 30
+      items:
+        $ref: './commerce.yaml#/FlightOffer'
+    status:
+      $ref: './commerce.yaml#/SearchStatus'
+    disclosure:
+      $ref: './commerce.yaml#/CommerceDisclosure'
+StaySearchRequest:
+  type: object
+  additionalProperties: false
+  required: [checkIn, checkOut]
+  properties:
+    checkIn:
+      type: string
+      format: date
+    checkOut:
+      type: string
+      format: date
+    budget:
+      $ref: './money.yaml'
+    radiusMeters:
+      type: integer
+      minimum: 100
+      maximum: 50000
+    maximumWalkMeters:
+      type: integer
+      minimum: 0
+      maximum: 20000
+StaySearchResponse:
+  type: object
+  additionalProperties: false
+  required: [offers, status, disclosure]
+  properties:
+    offers:
+      type: array
+      maxItems: 30
+      items:
+        $ref: './commerce.yaml#/StayOffer'
+    status:
+      $ref: './commerce.yaml#/SearchStatus'
+    disclosure:
+      $ref: './commerce.yaml#/CommerceDisclosure'
+ActivitySearchRequest:
+  type: object
+  additionalProperties: false
+  properties:
+    date:
+      type: string
+      format: date
+    freeFrom:
+      type: string
+      format: date-time
+    freeUntil:
+      type: string
+      format: date-time
+    budget:
+      $ref: './money.yaml'
+    interests:
+      type: array
+      maxItems: 20
+      items:
+        type: string
+        maxLength: 40
+    maximumDistanceMeters:
+      type: integer
+      minimum: 0
+      maximum: 50000
+ActivitySearchResponse:
+  type: object
+  additionalProperties: false
+  required: [offers, status, disclosure]
+  properties:
+    offers:
+      type: array
+      maxItems: 30
+      items:
+        $ref: './commerce.yaml#/ActivityOffer'
+    status:
+      $ref: './commerce.yaml#/SearchStatus'
+    disclosure:
+      $ref: './commerce.yaml#/CommerceDisclosure'
+CreateHandoffRequest:
+  type: object
+  additionalProperties: false
+  required: [offerId]
+  properties:
+    offerId:
+      type: string
+      minLength: 1
+      maxLength: 200
+    tripId:
+      type: string
+      format: uuid
+BookingHandoff:
+  type: object
+  additionalProperties: false
+  required: [id, offerId, partner, product, destinationUrl, title, price, disclosure, expiresAt]
+  description: Server-generated partner handoff; the client never builds an affiliate URL
+  properties:
+    id:
+      type: string
+      format: uuid
+    offerId:
+      type: string
+    partner:
+      type: string
+    product:
+      type: string
+      enum: [flight, stay, activity, transfer, car, esim, insurance]
+    destinationUrl:
+      type: string
+      format: uri
+    title:
+      type: string
+    price:
+      $ref: './money.yaml'
+    disclosure:
+      $ref: './commerce.yaml#/CommerceDisclosure'
+    createdAt:
+      type: string
+      format: date-time
+    expiresAt:
+      type: string
+      format: date-time

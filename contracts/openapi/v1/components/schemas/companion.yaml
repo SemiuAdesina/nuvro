@@ -1,0 +1,115 @@
+TranslateRequest:
+  type: object
+  additionalProperties: false
+  required: [text]
+  properties:
+    text:
+      type: string
+      minLength: 1
+      maxLength: 5000
+    sourceLanguage:
+      type: string
+      maxLength: 16
+      description: BCP 47 tag; omit to let the provider detect it
+    targetLanguage:
+      type: string
+      maxLength: 16
+    context:
+      type: string
+      maxLength: 200
+Translation:
+  type: object
+  additionalProperties: false
+  required: [sourceLanguage, targetLanguage, sourceText, translatedText, detected, confidence]
+  properties:
+    sourceLanguage:
+      type: string
+    targetLanguage:
+      type: string
+    sourceText:
+      type: string
+    translatedText:
+      type: string
+    detected:
+      type: boolean
+    confidence:
+      type: string
+      enum: [high, medium, low, unknown]
+    provider:
+      type: string
+Phrase:
+  type: object
+  additionalProperties: false
+  required: [key, category, sourceText, translated]
+  properties:
+    key:
+      type: string
+    category:
+      type: string
+      enum: [hotel, restaurant, transport, directions, shopping, emergency, medical, general]
+    sourceText:
+      type: string
+    targetText:
+      type: string
+    translated:
+      type: boolean
+      description: False when no translation provider was available
+PhrasePack:
+  type: object
+  additionalProperties: false
+  required: [sourceLanguage, targetLanguage, phrases]
+  properties:
+    sourceLanguage:
+      type: string
+    targetLanguage:
+      type: string
+    phrases:
+      type: array
+      maxItems: 100
+      items:
+        $ref: '#/Phrase'
+OfflinePack:
+  type: object
+  additionalProperties: false
+  required: [version, tripId, timezone, generatedAt, expiresAt, days, phrases, alerts, excluded, freshness]
+  description: Bounded snapshot for poor connectivity; nothing in it is live
+  properties:
+    version:
+      type: string
+    tripId:
+      type: string
+      format: uuid
+    timezone:
+      type: string
+    itineraryVersion:
+      type: integer
+      minimum: 0
+    generatedAt:
+      type: string
+      format: date-time
+    expiresAt:
+      type: string
+      format: date-time
+    days:
+      type: array
+      maxItems: 90
+      items:
+        $ref: './itinerary.yaml#/ItineraryDay'
+    phrases:
+      type: array
+      maxItems: 100
+      items:
+        $ref: '#/Phrase'
+    alerts:
+      type: array
+      maxItems: 20
+      items:
+        $ref: './runtime.yaml#/TripAlert'
+    excluded:
+      type: array
+      maxItems: 10
+      description: Content deliberately left out, for licensing or staleness
+      items:
+        type: string
+    freshness:
+      $ref: './common.yaml#/Freshness'

@@ -1,0 +1,40 @@
+type: object
+title: Error
+description: |
+  Every failing NUVRO response uses this envelope. The code is stable and safe to branch on
+  in client code. The message is safe to display. Server detail such as SQL, stack traces,
+  provider errors, credentials and filesystem paths never appears here.
+required:
+  - error
+additionalProperties: false
+properties:
+  error:
+    type: object
+    required:
+      - code
+      - message
+    additionalProperties: false
+    properties:
+      code:
+        type: string
+        description: Stable machine readable code.
+        enum:
+          - invalid_input
+          - unauthenticated
+          - forbidden
+          - not_found
+          - method_not_allowed
+          - conflict
+          - rate_limited
+          - unavailable
+          - internal
+      message:
+        type: string
+        description: Message that is safe to show to a traveller.
+        examples:
+          - The requested resource does not exist.
+      request_id:
+        type: string
+        description: Identifier of the request, for support and log correlation.
+        examples:
+          - 4f0d5c1a9b2e4d3f8a6c7b5e1d0f2a3c

@@ -1,0 +1,306 @@
+OfferFreshness:
+  type: string
+  enum: [live, recent, stale, expired]
+CommerceDisclosure:
+  type: object
+  additionalProperties: false
+  required: [code, partner]
+  description: Commercial relationship the client must show; never hidden
+  properties:
+    code:
+      type: string
+      enum: [affiliate.eligible_booking]
+    partner:
+      type: string
+OfferBase:
+  type: object
+  additionalProperties: false
+  required: [id, partner, product, title, price, available, freshness, observedAt, reasons, rank]
+  description: Traveller-facing offer; commission is never part of this contract
+  properties:
+    id:
+      type: string
+      description: Opaque NUVRO offer reference, not a provider identifier
+    partner:
+      type: string
+    product:
+      type: string
+      enum: [flight, stay, activity, transfer, car, esim, insurance]
+    title:
+      type: string
+    price:
+      $ref: './money.yaml'
+    originalPrice:
+      $ref: './money.yaml'
+    available:
+      type: boolean
+    cancellationSummary:
+      type: string
+    freshness:
+      $ref: '#/OfferFreshness'
+    observedAt:
+      type: string
+      format: date-time
+    expiresAt:
+      type: string
+      format: date-time
+    reasons:
+      type: array
+      maxItems: 8
+      items:
+        type: string
+        enum: [best_price, shortest_trip, fewer_stops, best_location, within_budget, flexible_cancellation, fits_itinerary, highly_rated]
+    rank:
+      type: integer
+      minimum: 1
+FlightOffer:
+  type: object
+  additionalProperties: false
+  required: [id, partner, product, title, price, available, freshness, observedAt, reasons, rank, stops, durationMinutes]
+  properties:
+    id:
+      type: string
+      description: Opaque NUVRO offer reference, not a provider identifier
+    partner:
+      type: string
+    product:
+      type: string
+      enum: [flight, stay, activity, transfer, car, esim, insurance]
+    title:
+      type: string
+    price:
+      $ref: './money.yaml'
+    originalPrice:
+      $ref: './money.yaml'
+    available:
+      type: boolean
+    cancellationSummary:
+      type: string
+    freshness:
+      $ref: '#/OfferFreshness'
+    observedAt:
+      type: string
+      format: date-time
+    expiresAt:
+      type: string
+      format: date-time
+    reasons:
+      type: array
+      maxItems: 8
+      items:
+        type: string
+        enum: [best_price, shortest_trip, fewer_stops, best_location, within_budget, flexible_cancellation, fits_itinerary, highly_rated]
+    rank:
+      type: integer
+      minimum: 1
+    stops:
+      type: integer
+      minimum: 0
+    durationMinutes:
+      type: integer
+      minimum: 1
+    layoverMinutes:
+      type: integer
+      minimum: 0
+    departAt:
+      type: string
+      format: date-time
+    arriveAt:
+      type: string
+      format: date-time
+    carrier:
+      type: string
+    baggageIncluded:
+      type: boolean
+    changeable:
+      type: boolean
+
+StayOffer:
+  type: object
+  additionalProperties: false
+  required: [id, partner, product, title, price, available, freshness, observedAt, reasons, rank, location, nights]
+  properties:
+    id:
+      type: string
+      description: Opaque NUVRO offer reference, not a provider identifier
+    partner:
+      type: string
+    product:
+      type: string
+      enum: [flight, stay, activity, transfer, car, esim, insurance]
+    title:
+      type: string
+    price:
+      $ref: './money.yaml'
+    originalPrice:
+      $ref: './money.yaml'
+    available:
+      type: boolean
+    cancellationSummary:
+      type: string
+    freshness:
+      $ref: '#/OfferFreshness'
+    observedAt:
+      type: string
+      format: date-time
+    expiresAt:
+      type: string
+      format: date-time
+    reasons:
+      type: array
+      maxItems: 8
+      items:
+        type: string
+        enum: [best_price, shortest_trip, fewer_stops, best_location, within_budget, flexible_cancellation, fits_itinerary, highly_rated]
+    rank:
+      type: integer
+      minimum: 1
+    location:
+      $ref: './common.yaml#/GeoPoint'
+    nights:
+      type: integer
+      minimum: 1
+    rating:
+      type: number
+      minimum: 0
+      maximum: 5
+    reviewCount:
+      type: integer
+      minimum: 0
+    neighbourhood:
+      type: string
+    freeCancellation:
+      type: boolean
+
+ActivityOffer:
+  type: object
+  additionalProperties: false
+  required: [id, partner, product, title, price, available, freshness, observedAt, reasons, rank, location, durationMinutes]
+  properties:
+    id:
+      type: string
+      description: Opaque NUVRO offer reference, not a provider identifier
+    partner:
+      type: string
+    product:
+      type: string
+      enum: [flight, stay, activity, transfer, car, esim, insurance]
+    title:
+      type: string
+    price:
+      $ref: './money.yaml'
+    originalPrice:
+      $ref: './money.yaml'
+    available:
+      type: boolean
+    cancellationSummary:
+      type: string
+    freshness:
+      $ref: '#/OfferFreshness'
+    observedAt:
+      type: string
+      format: date-time
+    expiresAt:
+      type: string
+      format: date-time
+    reasons:
+      type: array
+      maxItems: 8
+      items:
+        type: string
+        enum: [best_price, shortest_trip, fewer_stops, best_location, within_budget, flexible_cancellation, fits_itinerary, highly_rated]
+    rank:
+      type: integer
+      minimum: 1
+    location:
+      $ref: './common.yaml#/GeoPoint'
+    durationMinutes:
+      type: integer
+      minimum: 1
+    startsAt:
+      type: string
+      format: date-time
+    outdoor:
+      type: boolean
+    rating:
+      type: number
+      minimum: 0
+      maximum: 5
+
+TransferOffer:
+  type: object
+  additionalProperties: false
+  required: [id, partner, product, title, price, available, freshness, observedAt, reasons, rank, mode, durationMinutes, passengers]
+  properties:
+    id:
+      type: string
+      description: Opaque NUVRO offer reference, not a provider identifier
+    partner:
+      type: string
+    product:
+      type: string
+      enum: [flight, stay, activity, transfer, car, esim, insurance]
+    title:
+      type: string
+    price:
+      $ref: './money.yaml'
+    originalPrice:
+      $ref: './money.yaml'
+    available:
+      type: boolean
+    cancellationSummary:
+      type: string
+    freshness:
+      $ref: '#/OfferFreshness'
+    observedAt:
+      type: string
+      format: date-time
+    expiresAt:
+      type: string
+      format: date-time
+    reasons:
+      type: array
+      maxItems: 8
+      items:
+        type: string
+        enum: [best_price, shortest_trip, fewer_stops, best_location, within_budget, flexible_cancellation, fits_itinerary, highly_rated]
+    rank:
+      type: integer
+      minimum: 1
+    mode:
+      type: string
+    durationMinutes:
+      type: integer
+      minimum: 1
+    passengers:
+      type: integer
+      minimum: 1
+    pickupAt:
+      type: string
+      format: date-time
+PartnerStatus:
+  type: object
+  additionalProperties: false
+  required: [partner, available]
+  properties:
+    partner:
+      type: string
+    available:
+      type: boolean
+    reason:
+      type: string
+SearchStatus:
+  type: object
+  additionalProperties: false
+  required: [partners, rankingVersion, searchedAt]
+  properties:
+    partners:
+      type: array
+      maxItems: 20
+      items:
+        $ref: '#/PartnerStatus'
+    rankingVersion:
+      type: string
+    searchedAt:
+      type: string
+      format: date-time

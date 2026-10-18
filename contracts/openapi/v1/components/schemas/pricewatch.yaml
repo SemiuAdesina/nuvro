@@ -1,0 +1,108 @@
+PriceWatchTarget:
+  type: object
+  additionalProperties: false
+  required: [startDate, endDate, adults]
+  properties:
+    origin:
+      type: string
+      pattern: '^[A-Z]{3}$'
+    destination:
+      type: string
+      pattern: '^[A-Z]{3}$'
+    propertyId:
+      type: string
+      maxLength: 200
+    placeId:
+      type: string
+      maxLength: 200
+    startDate:
+      type: string
+      format: date
+    endDate:
+      type: string
+      format: date
+    adults:
+      type: integer
+      minimum: 1
+      maximum: 20
+    children:
+      type: integer
+      minimum: 0
+      maximum: 20
+    cabin:
+      type: string
+      enum: [economy, premium_economy, business, first]
+PriceWatchThreshold:
+  type: object
+  additionalProperties: false
+  properties:
+    percentageDrop:
+      type: integer
+      minimum: 1
+      maximum: 90
+    absoluteMinor:
+      type: integer
+      format: int64
+      minimum: 0
+CreatePriceWatchRequest:
+  type: object
+  additionalProperties: false
+  required: [product, target, baseline]
+  properties:
+    tripId:
+      type: string
+      format: uuid
+    product:
+      type: string
+      enum: [flight, stay, activity]
+    target:
+      $ref: '#/PriceWatchTarget'
+    baseline:
+      $ref: './money.yaml'
+    threshold:
+      $ref: '#/PriceWatchThreshold'
+PriceWatch:
+  type: object
+  additionalProperties: false
+  required: [id, product, target, baseline, threshold, status, createdAt, expiresAt]
+  properties:
+    id:
+      type: string
+      format: uuid
+    tripId:
+      type: string
+      format: uuid
+    product:
+      type: string
+      enum: [flight, stay, activity]
+    target:
+      $ref: '#/PriceWatchTarget'
+    baseline:
+      $ref: './money.yaml'
+    threshold:
+      $ref: '#/PriceWatchThreshold'
+    status:
+      type: string
+      enum: [active, paused, completed, ended]
+    createdAt:
+      type: string
+      format: date-time
+    lastCheckedAt:
+      type: string
+      format: date-time
+    nextCheckAt:
+      type: string
+      format: date-time
+    expiresAt:
+      type: string
+      format: date-time
+PriceWatchList:
+  type: object
+  additionalProperties: false
+  required: [watches]
+  properties:
+    watches:
+      type: array
+      maxItems: 50
+      items:
+        $ref: '#/PriceWatch'

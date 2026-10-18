@@ -1,0 +1,10 @@
+type: integer
+title: MatchScore
+description: |
+  Vacation Match Score. Produced by deterministic NUVRO scoring in the backend and never by a
+  language model or a client. Clients display it and explain it with the accompanying reasons;
+  they never compute it.
+minimum: 0
+maximum: 100
+examples:
+  - 94

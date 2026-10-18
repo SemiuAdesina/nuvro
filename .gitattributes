@@ -1,0 +1,28 @@
+* text=auto eol=lf
+
+*.go text diff=golang
+*.swift text diff=swift
+*.kt text diff=kotlin
+*.kts text diff=kotlin
+*.sql text
+*.sh text eol=lf
+*.yaml text
+*.yml text
+*.md text
+*.json text
+
+go.sum linguist-generated=true merge=binary
+Package.resolved linguist-generated=true
+gradle/wrapper/gradle-wrapper.jar binary
+gradlew text eol=lf
+
+backend/internal/adapter/postgres/sqlc/** linguist-generated=true
+
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.pdf binary
+*.zip binary
+*.ttf binary
+*.otf binary
+*.xcassets/** binary

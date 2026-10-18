@@ -1,0 +1,50 @@
+type: object
+title: TravelerProfile
+description: The traveller's explicit preferences and what NUVRO has learned, always visible and editable.
+required: [name, initial, home_label, style_chips, preferences, learned, uses_trip_history]
+additionalProperties: false
+properties:
+  name:
+    type: string
+  initial:
+    type: string
+  home_label:
+    type: string
+  style_chips:
+    type: array
+    items:
+      type: object
+      required: [name, tone]
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        tone:
+          type: string
+          enum: [aqua, gold, twilight, sky]
+  preferences:
+    type: array
+    items:
+      type: object
+      required: [name, value, placeholder]
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+        placeholder:
+          type: string
+  learned:
+    type: array
+    items:
+      type: object
+      required: [text, source]
+      additionalProperties: false
+      properties:
+        text:
+          type: string
+        source:
+          type: string
+  uses_trip_history:
+    type: boolean

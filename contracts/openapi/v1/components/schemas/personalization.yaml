@@ -1,0 +1,164 @@
+PreferenceOrigin:
+  type: string
+  description: Where a preference came from; explicit always outranks learned
+  enum: [explicit_profile, confirmed_learned, inferred_learned]
+PersonalizationInsight:
+  type: object
+  additionalProperties: false
+  required: [id, key, category, summaryCode, confidence, evidenceCount, status, editable]
+  description: Structured learning statement; the client renders the copy
+  properties:
+    id:
+      type: string
+      format: uuid
+    key:
+      type: string
+    category:
+      type: string
+    summaryCode:
+      type: string
+    parameters:
+      type: object
+      additionalProperties:
+        type: string
+    confidence:
+      type: string
+      enum: [low, medium, high]
+    evidenceCount:
+      type: integer
+      minimum: 0
+    status:
+      type: string
+      enum: [active, confirmed, dismissed, suppressed]
+    editable:
+      type: boolean
+    createdAt:
+      type: string
+      format: date-time
+    updatedAt:
+      type: string
+      format: date-time
+PersonalizationInsightList:
+  type: object
+  additionalProperties: false
+  required: [insights]
+  properties:
+    insights:
+      type: array
+      maxItems: 50
+      items:
+        $ref: '#/PersonalizationInsight'
+UpdateInsightRequest:
+  type: object
+  additionalProperties: false
+  required: [status]
+  properties:
+    status:
+      type: string
+      enum: [confirmed, dismissed, suppressed]
+PersonalizationPreference:
+  type: object
+  additionalProperties: false
+  required: [key, origin, confidence]
+  properties:
+    key:
+      type: string
+    origin:
+      $ref: '#/PreferenceOrigin'
+    confidence:
+      type: string
+      enum: [low, medium, high]
+PersonalizationSettings:
+  type: object
+  additionalProperties: false
+  required: [historyLearningEnabled, rulesVersion, generatedAt, explicit, learned, suppressed]
+  properties:
+    historyLearningEnabled:
+      type: boolean
+      description: When false, no historical behaviour informs recommendations
+    rulesVersion:
+      type: string
+    generatedAt:
+      type: string
+      format: date-time
+    explicit:
+      type: array
+      maxItems: 50
+      items:
+        $ref: '#/PersonalizationPreference'
+    learned:
+      type: array
+      maxItems: 50
+      items:
+        $ref: '#/PersonalizationPreference'
+    suppressed:
+      type: array
+      maxItems: 50
+      items:
+        type: string
+UpdatePersonalizationRequest:
+  type: object
+  additionalProperties: false
+  required: [historyLearningEnabled]
+  properties:
+    historyLearningEnabled:
+      type: boolean
+TripFeedbackRequest:
+  type: object
+  additionalProperties: false
+  properties:
+    positives:
+      type: array
+      maxItems: 6
+      items:
+        $ref: '#/FeedbackAspect'
+    negatives:
+      type: array
+      maxItems: 6
+      items:
+        $ref: '#/FeedbackAspect'
+    pace:
+      type: string
+      enum: [too_slow, just_right, too_busy]
+    travelBurden:
+      type: string
+      enum: [light, comfortable, too_much]
+    returnIntent:
+      type: string
+      enum: [would_return, undecided, would_not_return]
+FeedbackAspect:
+  type: string
+  enum: [coastal_places, local_food, culture_and_history, nature_and_outdoors, nightlife, quiet_area, central_area, long_transfers, busy_schedule]
+TripFeedback:
+  type: object
+  additionalProperties: false
+  required: [tripId, positives, negatives, submittedAt]
+  properties:
+    tripId:
+      type: string
+      format: uuid
+    positives:
+      type: array
+      maxItems: 6
+      items:
+        $ref: '#/FeedbackAspect'
+    negatives:
+      type: array
+      maxItems: 6
+      items:
+        $ref: '#/FeedbackAspect'
+    pace:
+      type: string
+      enum: [too_slow, just_right, too_busy]
+    travelBurden:
+      type: string
+      enum: [light, comfortable, too_much]
+    returnIntent:
+      type: string
+      enum: [would_return, undecided, would_not_return]
+    submittedAt:
+      type: string
+      format: date-time
+    updatedAt:
+      type: string
+      format: date-time

@@ -1,0 +1,72 @@
+type: object
+title: TripPlan
+description: The traveller's plan for a chosen destination, the centre of the Plan stage.
+required:
+  - id
+  - destination
+  - date_range_label
+  - travelers_label
+  - start_date
+  - budget_ceiling
+  - readiness
+  - budget_lines
+  - days
+additionalProperties: false
+properties:
+  id:
+    type: string
+  destination:
+    $ref: './destination-match.yaml'
+  date_range_label:
+    type: string
+    description: Localised, already formatted by the backend for the traveller's locale.
+    examples:
+      - Oct 12–19
+  travelers_label:
+    type: string
+    examples:
+      - 2 adults
+  start_date:
+    type: string
+    format: date
+  budget_ceiling:
+    $ref: './money.yaml'
+  readiness:
+    type: array
+    items:
+      type: object
+      required: [name, is_ready]
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        is_ready:
+          type: boolean
+  budget_lines:
+    type: array
+    items:
+      type: object
+      required: [category, amount, details]
+      additionalProperties: false
+      properties:
+        category:
+          type: string
+        amount:
+          $ref: './money.yaml'
+        booked:
+          $ref: './money.yaml'
+        details:
+          type: array
+          items:
+            type: object
+            required: [label, amount]
+            additionalProperties: false
+            properties:
+              label:
+                type: string
+              amount:
+                $ref: './money.yaml'
+  days:
+    type: array
+    items:
+      $ref: './itinerary-day.yaml'

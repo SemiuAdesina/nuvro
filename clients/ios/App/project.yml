@@ -1,0 +1,101 @@
+name: Nuvro
+
+options:
+  bundleIdPrefix: com.vectixlogic
+  xcodeVersion: "26.3"
+  createIntermediateGroups: true
+  generateEmptyDirectories: false
+  deploymentTarget:
+    iOS: "18.0"
+
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    SWIFT_STRICT_CONCURRENCY: complete
+    ENABLE_USER_SCRIPT_SANDBOXING: YES
+    CODE_SIGN_STYLE: Automatic
+    DEVELOPMENT_TEAM: ""
+
+packages:
+  NuvroKit:
+    path: ../Packages/NuvroKit
+
+targets:
+  Nuvro:
+    type: application
+    platform: iOS
+    sources:
+      - path: Nuvro
+    dependencies:
+      - package: NuvroKit
+        product: NuvroOnboarding
+      - package: NuvroKit
+        product: NuvroDesignSystem
+      - package: NuvroKit
+        product: NuvroLocalization
+      - package: NuvroKit
+        product: NuvroModels
+      - package: NuvroKit
+        product: NuvroDiscover
+      - package: NuvroKit
+        product: NuvroDestination
+      - package: NuvroKit
+        product: NuvroPlan
+      - package: NuvroKit
+        product: NuvroTravel
+      - package: NuvroKit
+        product: NuvroSaved
+      - package: NuvroKit
+        product: NuvroProfile
+      - package: NuvroKit
+        product: NuvroAuthentication
+      - package: NuvroKit
+        product: NuvroPermissions
+      - package: NuvroKit
+        product: NuvroConnectivity
+      - package: NuvroKit
+        product: NuvroTravelSetup
+      - package: NuvroKit
+        product: NuvroAPI
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.vectixlogic.nuvro
+        PRODUCT_NAME: Nuvro
+        TARGETED_DEVICE_FAMILY: "1"
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: NUVRO
+        INFOPLIST_KEY_NuvroAPIBaseURL: ""
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
+        INFOPLIST_KEY_ITSAppUsesNonExemptEncryption: NO
+        INFOPLIST_KEY_NSLocationWhenInUseUsageDescription: NUVRO uses your location to show nearby places and travel times during your trip.
+        INFOPLIST_KEY_NSCameraUsageDescription: NUVRO uses the camera to translate menus and signs.
+        INFOPLIST_KEY_NSMicrophoneUsageDescription: NUVRO uses the microphone to translate what you say.
+        MARKETING_VERSION: "0.1.0"
+        CURRENT_PROJECT_VERSION: "1"
+
+  NuvroUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - path: ../UITests
+    dependencies:
+      - target: Nuvro
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.vectixlogic.nuvro.uitests
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_TARGET_NAME: Nuvro
+
+schemes:
+  Nuvro:
+    build:
+      targets:
+        Nuvro: all
+        NuvroUITests: [test]
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - NuvroUITests

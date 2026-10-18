@@ -1,0 +1,39 @@
+type: object
+title: NearbyPlace
+description: A place ranked for the traveller's current location, free time, interests, and itinerary.
+required: [id, name, category, category_label, walk_minutes, travel_label, is_open, hours_label, reason, media, coordinate, marker_letter]
+additionalProperties: false
+properties:
+  id:
+    type: string
+  name:
+    type: string
+  category:
+    type: string
+    enum: [food, coffee, things_to_do, views, shopping, indoor, saved]
+  category_label:
+    type: string
+    examples:
+      - Market
+  walk_minutes:
+    type: integer
+    minimum: 0
+  travel_label:
+    type: string
+    examples:
+      - 8 min walk
+  is_open:
+    type: boolean
+  hours_label:
+    type: string
+    examples:
+      - Open until 20:00
+  reason:
+    type: string
+  media:
+    $ref: './destination-media.yaml'
+  coordinate:
+    $ref: './stay-option.yaml#/properties/coordinate'
+  marker_letter:
+    type: string
+    maxLength: 1

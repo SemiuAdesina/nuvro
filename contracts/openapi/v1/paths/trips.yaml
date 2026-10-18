@@ -1,0 +1,69 @@
+collection:
+  post:
+    operationId: createTrip
+    summary: Create a draft trip owned by the authenticated traveller
+    parameters:
+      - $ref: '../components/parameters/idempotency-key.yaml'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/trip.yaml#/TripInput'
+    responses:
+      '201':
+        description: Created trip
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/trip.yaml#/Trip'
+      default:
+        $ref: '../components/responses/problem.yaml'
+  get:
+    operationId: listTrips
+    summary: Trips the authenticated traveller is a member of, newest first
+    parameters:
+      - $ref: '../components/parameters/cursor.yaml'
+      - $ref: '../components/parameters/limit.yaml'
+    responses:
+      '200':
+        description: One page of trips
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/trip.yaml#/TripPage'
+      default:
+        $ref: '../components/responses/problem.yaml'
+item:
+  parameters:
+    - $ref: '../components/parameters/trip-id.yaml'
+  get:
+    operationId: getTrip
+    summary: One trip the authenticated traveller can read
+    responses:
+      '200':
+        description: Trip
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/trip.yaml#/Trip'
+      default:
+        $ref: '../components/responses/problem.yaml'
+  patch:
+    operationId: patchTrip
+    summary: Partial update by an owner or editor; omitted fields are unchanged
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/trip.yaml#/TripPatch'
+    responses:
+      '200':
+        description: Updated trip
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/trip.yaml#/Trip'
+      default:
+        $ref: '../components/responses/problem.yaml'

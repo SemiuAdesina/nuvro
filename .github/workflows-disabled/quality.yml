@@ -1,0 +1,54 @@
+name: quality
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: quality-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  repository-rules:
+    name: Repository rules
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Line count gate
+        run: ./scripts/check-loc.sh
+
+      - name: Comment gate
+        run: ./scripts/check-comments.sh
+
+      - name: Go dependency direction gate
+        run: ./scripts/check-go-deps.sh
+
+  contracts:
+    name: OpenAPI contract
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Parse every contract document
+        run: |
+          python3 - <<'PY'
+          import glob
+          import sys
+          import yaml
+
+          failures = []
+          for path in sorted(glob.glob("contracts/openapi/**/*.yaml", recursive=True)):
+              try:
+                  yaml.safe_load(open(path))
+              except yaml.YAMLError as error:
+                  failures.append(f"{path}: {error}")
+
+          for failure in failures:
+              print(failure, file=sys.stderr)
+          sys.exit(1 if failures else 0)
+          PY

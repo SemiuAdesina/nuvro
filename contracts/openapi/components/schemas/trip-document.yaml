@@ -1,0 +1,36 @@
+type: object
+title: TripDocument
+description: |
+  A ticket or confirmation in the trip wallet. References are masked on overview screens and
+  revealed on demand. Passports and other identity documents are never returned here.
+required: [id, category, title, subtitle, when_label, travelers, is_available_offline, reference]
+additionalProperties: false
+properties:
+  id:
+    type: string
+  category:
+    type: string
+    enum: [flight, stay, activity, transfer, other]
+  title:
+    type: string
+  subtitle:
+    type: string
+  when_label:
+    type: string
+  travelers:
+    type: integer
+    minimum: 1
+  is_available_offline:
+    type: boolean
+  reference:
+    type: string
+  can_add_to_wallet:
+    type: boolean
+  is_needed_next:
+    type: boolean
+  is_expired:
+    type: boolean
+    description: True once the ticket's validity has passed; the client shows it but never presents it for scanning.
+  has_barcode:
+    type: boolean
+    description: False when the provider supplied no scannable code; the client shows the reference instead.

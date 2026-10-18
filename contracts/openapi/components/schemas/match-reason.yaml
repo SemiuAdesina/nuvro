@@ -1,0 +1,18 @@
+type: object
+title: MatchReason
+description: One line of the explanation behind a Match Score, in the traveller's language.
+required:
+  - text
+  - verdict
+additionalProperties: false
+properties:
+  text:
+    type: string
+    examples:
+      - Within your budget
+  verdict:
+    type: string
+    description: Whether this factor supports the match or is a trade-off the traveller accepted.
+    enum:
+      - fits
+      - tradeoff

@@ -1,0 +1,62 @@
+type: object
+title: PracticalInfo
+description: |
+  Entry, safety and practical facts for a destination. Entry rows come from a trusted
+  requirements provider and carry the traveller's passport context; every section states its
+  source and when it was checked.
+required: [entry_checked_label, entry_rows, sections, emergency]
+additionalProperties: false
+properties:
+  entry_checked_label:
+    type: string
+  entry_rows:
+    type: array
+    items:
+      type: object
+      required: [key, value, state]
+      additionalProperties: false
+      properties:
+        key:
+          type: string
+        value:
+          type: string
+        state:
+          type: string
+          enum: [met, info]
+  sections:
+    type: array
+    items:
+      type: object
+      required: [name, gist, rows, source, placeholder]
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        gist:
+          type: string
+        rows:
+          type: array
+          items:
+            type: object
+            required: [key, value]
+            additionalProperties: false
+            properties:
+              key:
+                type: string
+              value:
+                type: string
+        source:
+          type: string
+        placeholder:
+          type: string
+  emergency:
+    type: array
+    items:
+      type: object
+      required: [key, value]
+      additionalProperties: false
+      properties:
+        key:
+          type: string
+        value:
+          type: string

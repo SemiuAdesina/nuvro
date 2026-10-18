@@ -1,0 +1,225 @@
+active:
+  parameters:
+    - name: tripId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    - name: latitude
+      in: query
+      schema:
+        type: number
+        minimum: -90
+        maximum: 90
+    - name: longitude
+      in: query
+      schema:
+        type: number
+        minimum: -180
+        maximum: 180
+    - name: language
+      in: query
+      schema:
+        type: string
+        maxLength: 16
+  get:
+    operationId: getActiveTrip
+    summary: What matters on this trip right now, in the destination timezone
+    responses:
+      '200':
+        description: Active trip snapshot
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/runtime.yaml#/ActiveTrip'
+      default:
+        $ref: '../components/responses/problem.yaml'
+alerts:
+  parameters:
+    - name: tripId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    - name: includeResolved
+      in: query
+      schema:
+        type: boolean
+        default: false
+  get:
+    operationId: listTripAlerts
+    summary: Trip alerts
+    responses:
+      '200':
+        description: Alerts
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/runtime.yaml#/AlertList'
+      default:
+        $ref: '../components/responses/problem.yaml'
+alert:
+  parameters:
+    - name: tripId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    - name: alertId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+  patch:
+    operationId: patchTripAlert
+    summary: Mark an alert read or resolved
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/runtime.yaml#/UpdateAlertRequest'
+    responses:
+      '200':
+        description: Updated alert
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/runtime.yaml#/TripAlert'
+      default:
+        $ref: '../components/responses/problem.yaml'
+replan:
+  parameters:
+    - name: tripId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+  post:
+    operationId: proposeReplan
+    summary: Propose the smallest useful change; nothing is applied
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/replan.yaml#/ReplanRequest'
+    responses:
+      '200':
+        description: Proposal
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/replan.yaml#/ReplanProposal'
+      default:
+        $ref: '../components/responses/problem.yaml'
+apply:
+  parameters:
+    - name: tripId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    - name: proposalId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+  post:
+    operationId: applyReplan
+    summary: Apply an approved proposal atomically
+    responses:
+      '200':
+        description: Updated itinerary
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/itinerary.yaml#/Itinerary'
+      default:
+        $ref: '../components/responses/problem.yaml'
+translate:
+  parameters:
+    - name: tripId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+  post:
+    operationId: translateForTrip
+    summary: Translate text for this trip
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/companion.yaml#/TranslateRequest'
+    responses:
+      '200':
+        description: Translation
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/companion.yaml#/Translation'
+      default:
+        $ref: '../components/responses/problem.yaml'
+phrases:
+  parameters:
+    - name: tripId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    - name: targetLanguage
+      in: query
+      schema:
+        type: string
+        maxLength: 16
+    - name: category
+      in: query
+      schema:
+        type: array
+        maxItems: 8
+        items:
+          type: string
+          enum: [hotel, restaurant, transport, directions, shopping, emergency, medical, general]
+  get:
+    operationId: getTripPhrases
+    summary: Essential travel phrases for this trip
+    responses:
+      '200':
+        description: Phrase pack
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/companion.yaml#/PhrasePack'
+      default:
+        $ref: '../components/responses/problem.yaml'
+offline:
+  parameters:
+    - name: tripId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+  get:
+    operationId: getOfflinePack
+    summary: Bounded offline snapshot, explicitly not live
+    responses:
+      '200':
+        description: Offline pack
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/companion.yaml#/OfflinePack'
+      default:
+        $ref: '../components/responses/problem.yaml'

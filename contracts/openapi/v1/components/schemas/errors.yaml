@@ -1,0 +1,35 @@
+type: object
+additionalProperties: false
+required: [type, title, status, detail, code]
+properties:
+  type:
+    type: string
+    format: uri-reference
+  title:
+    type: string
+  status:
+    type: integer
+    minimum: 400
+    maximum: 599
+  detail:
+    type: string
+  instance:
+    type: string
+    format: uri-reference
+  code:
+    type: string
+    enum: [validation_error, authentication_required, forbidden, not_found, conflict, rate_limited, upstream_unavailable, provider_timeout, invalid_state, idempotency_conflict, internal_error, method_not_allowed, payload_too_large, unsupported_media_type]
+  requestId:
+    type: string
+  errors:
+    type: array
+    maxItems: 100
+    items:
+      type: object
+      additionalProperties: false
+      required: [field, code]
+      properties:
+        field:
+          type: string
+        code:
+          type: string

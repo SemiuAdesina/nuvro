@@ -1,0 +1,24 @@
+type: object
+title: DestinationMedia
+description: |
+  A backend-selected image for a destination or place. The client renders it and shows the
+  dominant-colour placeholder while loading or when no image was selected. Provider choice,
+  quality scoring, seasonal selection, rotation, and attribution are owned by the backend.
+required: [placeholder, alt_text]
+additionalProperties: false
+properties:
+  url:
+    type: string
+    format: uri
+  placeholder:
+    type: string
+    description: Dominant-colour placeholder token the client maps to its gradient palette.
+  alt_text:
+    type: string
+  attribution:
+    type: string
+  provider:
+    type: string
+  retrieved_at:
+    type: string
+    format: date-time

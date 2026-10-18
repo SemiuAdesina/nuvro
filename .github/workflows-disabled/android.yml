@@ -1,0 +1,60 @@
+name: android
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'clients/android/**'
+      - 'contracts/**'
+      - '.github/workflows/android.yml'
+  pull_request:
+    paths:
+      - 'clients/android/**'
+      - 'contracts/**'
+      - '.github/workflows/android.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: android-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  gradle:
+    name: Gradle build and unit tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: clients/android
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Detect the Gradle project
+        id: detect
+        run: |
+          if [ -f settings.gradle.kts ]; then
+            echo "present=true" >> "${GITHUB_OUTPUT}"
+          else
+            echo "present=false" >> "${GITHUB_OUTPUT}"
+            echo "The Android Gradle project has not been initialised yet."
+            echo "This job builds and tests it as soon as clients/android/settings.gradle.kts is committed."
+            echo "See clients/android/README.md."
+          fi
+
+      - uses: actions/setup-java@v4
+        if: steps.detect.outputs.present == 'true'
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - uses: gradle/actions/setup-gradle@v4
+        if: steps.detect.outputs.present == 'true'
+
+      - name: Lint
+        if: steps.detect.outputs.present == 'true'
+        run: ./gradlew lintDebug
+
+      - name: Unit tests
+        if: steps.detect.outputs.present == 'true'
+        run: ./gradlew testDebugUnitTest

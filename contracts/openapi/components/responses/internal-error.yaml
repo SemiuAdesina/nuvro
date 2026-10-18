@@ -1,0 +1,5 @@
+description: The request could not be completed.
+content:
+  application/json:
+    schema:
+      $ref: '../schemas/error.yaml'

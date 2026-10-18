@@ -1,0 +1,91 @@
+openapi: 3.1.0
+
+info:
+  title: NUVRO API
+  version: 0.1.0
+  summary: Global vacation intelligence and travel companion platform
+  description: |
+    This document is the source of truth for the contract between the NUVRO backend and the
+    native iOS and Android clients. Clients consume this contract rather than inventing their
+    own response types.
+
+    Phase 0 publishes only the operational probes. Product paths are added under `/v1` as the
+    Discover, Plan and Travel use cases are implemented, each in its own file under `paths/`
+    and referenced from here.
+
+servers:
+  - url: https://api.nuvro.app
+    description: Production
+  - url: https://api.staging.nuvro.app
+    description: Staging
+  - url: http://localhost:8080
+    description: Local development
+
+tags:
+  - name: Operations
+    description: Liveness and readiness probes used by orchestration, not by clients.
+
+paths:
+  /health/live:
+    $ref: './paths/health-live.yaml'
+  /health/ready:
+    $ref: './paths/health-ready.yaml'
+
+components:
+  schemas:
+    Error:
+      $ref: './components/schemas/error.yaml'
+    Money:
+      $ref: './components/schemas/money.yaml'
+    Liveness:
+      $ref: './components/schemas/liveness.yaml'
+    Readiness:
+      $ref: './components/schemas/readiness.yaml'
+    MatchScore:
+      $ref: './components/schemas/match-score.yaml'
+    MatchReason:
+      $ref: './components/schemas/match-reason.yaml'
+    DestinationMatch:
+      $ref: './components/schemas/destination-match.yaml'
+    TripPlan:
+      $ref: './components/schemas/trip-plan.yaml'
+    ItineraryDay:
+      $ref: './components/schemas/itinerary-day.yaml'
+    StayOption:
+      $ref: './components/schemas/stay-option.yaml'
+    PlanAdjustment:
+      $ref: './components/schemas/plan-adjustment.yaml'
+    DestinationMedia:
+      $ref: './components/schemas/destination-media.yaml'
+    NearbyPlace:
+      $ref: './components/schemas/nearby-place.yaml'
+    TripDocument:
+      $ref: './components/schemas/trip-document.yaml'
+    TripAlert:
+      $ref: './components/schemas/trip-alert.yaml'
+    TripSummary:
+      $ref: './components/schemas/trip-summary.yaml'
+    TravelProfile:
+      $ref: './components/schemas/travel-profile.yaml'
+    TripLibraryEntry:
+      $ref: './components/schemas/trip-library-entry.yaml'
+    SavedCollection:
+      $ref: './components/schemas/saved.yaml'
+    DestinationComparison:
+      $ref: './components/schemas/destination-comparison.yaml'
+    FlightOption:
+      $ref: './components/schemas/flight-option.yaml'
+    PracticalInfo:
+      $ref: './components/schemas/practical-info.yaml'
+    TravelerProfile:
+      $ref: './components/schemas/traveler-profile.yaml'
+  parameters:
+    AcceptLanguage:
+      $ref: './components/parameters/accept-language.yaml'
+    RequestId:
+      $ref: './components/parameters/request-id.yaml'
+  responses:
+    NotFound:
+      $ref: './components/responses/not-found.yaml'
+    InternalError:
+      $ref: './components/responses/internal-error.yaml'

@@ -1,0 +1,52 @@
+destination:
+  parameters:
+    - name: destinationId
+      in: path
+      required: true
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 200
+    - name: startDate
+      in: query
+      schema:
+        type: string
+        format: date
+    - name: endDate
+      in: query
+      schema:
+        type: string
+        format: date
+  get:
+    operationId: getDestination
+    summary: Destination intelligence, with independently available sections
+    responses:
+      '200':
+        description: Destination detail
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/intelligence.yaml#/DestinationDetail'
+      default:
+        $ref: '../components/responses/problem.yaml'
+media:
+  parameters:
+    - name: destinationId
+      in: path
+      required: true
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 200
+  get:
+    operationId: getDestinationMedia
+    summary: Selected destination photography with attribution
+    responses:
+      '200':
+        description: Destination media
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/intelligence.yaml#/DestinationMedia'
+      default:
+        $ref: '../components/responses/problem.yaml'

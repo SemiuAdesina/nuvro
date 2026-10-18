@@ -1,0 +1,56 @@
+type: object
+title: TripSummary
+description: The closing summary of a completed trip, with explicit preference feedback options.
+required: [destination_name, date_range_label, days, places_count, activities_count, kilometres_explored, hero, places, total, planned_total, loved_options, not_for_me_options, suggestion]
+additionalProperties: false
+properties:
+  destination_name:
+    type: string
+  date_range_label:
+    type: string
+  days:
+    type: integer
+  places_count:
+    type: integer
+  activities_count:
+    type: integer
+  kilometres_explored:
+    type: integer
+  hero:
+    $ref: './destination-media.yaml'
+  places:
+    type: array
+    items:
+      type: object
+      required: [name, media]
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        media:
+          $ref: './destination-media.yaml'
+  total:
+    $ref: './money.yaml'
+  planned_total:
+    $ref: './money.yaml'
+  loved_options:
+    type: array
+    items:
+      type: string
+  not_for_me_options:
+    type: array
+    items:
+      type: string
+  suggestion:
+    type: object
+    required: [name, country, reason, media]
+    additionalProperties: false
+    properties:
+      name:
+        type: string
+      country:
+        type: string
+      reason:
+        type: string
+      media:
+        $ref: './destination-media.yaml'

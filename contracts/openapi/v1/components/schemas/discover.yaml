@@ -1,0 +1,38 @@
+type: object
+additionalProperties: false
+required: [score, components, summary, weightsVersion, evidenceVersion]
+properties:
+  score:
+    type: integer
+    minimum: 0
+    maximum: 100
+  summary:
+    type: string
+  weightsVersion:
+    type: string
+  evidenceVersion:
+    type: string
+  components:
+    type: array
+    items:
+      type: object
+      additionalProperties: false
+      required: [key, label, awardedPoints, possiblePoints, assessment, explanation]
+      properties:
+        key:
+          type: string
+        label:
+          type: string
+        awardedPoints:
+          type: integer
+          minimum: 0
+          maximum: 100
+        possiblePoints:
+          type: integer
+          minimum: 0
+          maximum: 100
+        assessment:
+          type: string
+          enum: [strong, good, neutral, caution]
+        explanation:
+          type: string

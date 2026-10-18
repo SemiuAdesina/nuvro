@@ -1,0 +1,125 @@
+name: backend
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'backend/**'
+      - 'contracts/**'
+      - 'scripts/**'
+      - 'Makefile'
+      - '.github/workflows/backend.yml'
+  pull_request:
+    paths:
+      - 'backend/**'
+      - 'contracts/**'
+      - 'scripts/**'
+      - 'Makefile'
+      - '.github/workflows/backend.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: backend-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    working-directory: backend
+
+jobs:
+  build-and-test:
+    name: Build and test
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:18-alpine
+        env:
+          POSTGRES_HOST_AUTH_METHOD: trust
+          POSTGRES_DB: nuvro_test
+        ports: ['5432:5432']
+        options: --health-cmd "pg_isready -U postgres" --health-interval 5s --health-timeout 5s --health-retries 10
+      redis:
+        image: redis:8-alpine
+        ports: ['6379:6379']
+        options: --health-cmd "redis-cli ping" --health-interval 5s --health-timeout 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: backend/go.mod
+          cache-dependency-path: backend/go.sum
+
+      - name: Verify the module graph
+        run: |
+          go mod download
+          go mod verify
+
+      - name: Install pinned sqlc
+        run: go install github.com/sqlc-dev/sqlc/cmd/sqlc@v1.31.1
+
+      - name: Contract validation and generation drift
+        run: make -C .. api-validate api-check sql-check ios-contract
+
+      - name: Database and Redis integration
+        env:
+          NUVRO_TEST_DATABASE_URL: postgres://postgres@localhost:5432/nuvro_test?sslmode=disable
+          NUVRO_TEST_REDIS_URL: redis://localhost:6379/0
+        run: go test -race -tags=integration -count=1 ./tests/integration/...
+
+      - name: Fuzz seeds and short fuzzing
+        run: |
+          for target in \
+            "./internal/domain/money FuzzParseCurrency" \
+            "./internal/adapter/redis FuzzKey" \
+            "./internal/adapter/postgres FuzzIdentifier" \
+            "./internal/platform/cursor FuzzDecode" \
+            "./internal/domain/discovery FuzzNormalizeTags" \
+            "./internal/domain/geo FuzzPointValidation" \
+            "./internal/domain/place FuzzParseCategory" \
+            "./internal/domain/place FuzzOpeningHours" \
+            "./internal/domain/language FuzzParseLanguage" \
+            "./internal/domain/commerce FuzzDestinationAllowlist" \
+            "./internal/engine/personalization FuzzAggregationInvariants" \
+            "./internal/transport/http/handler/discover FuzzDiscoveryRequestCurrency" \
+            "./internal/transport/http/middleware FuzzParseIdempotencyKey" \
+            "./internal/platform/clientip FuzzResolveNeverTrustsAnUntrustedPeer" \
+            "./internal/platform/secret FuzzSealedValuesNeverOpenWithoutTheKey"; do
+            set -- ${target}
+            go test -run '^$' -fuzz="$2" -fuzztime=20s "$1"
+          done
+
+      - name: Check formatting
+        run: |
+          unformatted=$(gofmt -l .)
+          if [ -n "${unformatted}" ]; then
+            echo "these files are not gofmt clean:"
+            echo "${unformatted}"
+            exit 1
+          fi
+
+      - name: Vet
+        run: go vet ./...
+
+      - name: Test
+        run: go test -timeout 120s ./...
+
+      - name: Test with the race detector
+        run: go test -race -timeout 300s ./...
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: backend/go.mod
+          cache-dependency-path: backend/go.sum
+
+      - uses: golangci/golangci-lint-action@v6
+        with:
+          working-directory: backend

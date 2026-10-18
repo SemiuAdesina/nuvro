@@ -1,0 +1,5 @@
+description: Safe RFC 9457 Problem Details
+content:
+  application/problem+json:
+    schema:
+      $ref: '../schemas/errors.yaml'

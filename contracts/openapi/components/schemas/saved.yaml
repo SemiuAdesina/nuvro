@@ -1,0 +1,43 @@
+type: object
+title: SavedCollection
+description: Destinations and places the traveller saved, with the trip context they were saved in.
+required: [destinations, places]
+additionalProperties: false
+properties:
+  destinations:
+    type: array
+    items:
+      type: object
+      required: [id, name, country, match_percent, reason, note, media]
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        country:
+          type: string
+        match_percent:
+          type: integer
+          minimum: 0
+          maximum: 100
+        reason:
+          type: string
+        note:
+          type: string
+          description: Freshness context, for example that saved prices are not current.
+        media:
+          $ref: './destination-media.yaml'
+  places:
+    type: array
+    items:
+      type: object
+      required: [name, subtitle, media]
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        subtitle:
+          type: string
+        media:
+          $ref: './destination-media.yaml'

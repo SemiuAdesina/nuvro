@@ -1,0 +1,285 @@
+openapi: 3.1.0
+info:
+  title: NUVRO API
+  version: 1.0.0
+  description: Released operations. Every product operation requires a verified NUVRO principal.
+security:
+  - bearerAuth: []
+paths:
+  /health/live:
+    $ref: './paths/system.yaml#/live'
+  /health/ready:
+    $ref: './paths/system.yaml#/ready'
+  /v1/auth/sessions:
+    $ref: './paths/auth.yaml#/sessions'
+  /v1/auth/sessions/refresh:
+    $ref: './paths/auth.yaml#/refresh'
+  /v1/me:
+    $ref: './paths/profile.yaml#/me'
+  /v1/me/preferences:
+    $ref: './paths/profile.yaml#/preferences'
+  /v1/me/identity/apple:
+    $ref: './paths/profile.yaml#/appleIdentity'
+  /v1/discover/matches:
+    $ref: './paths/discover.yaml#/matches'
+  /v1/destinations/{destinationId}:
+    $ref: './paths/intelligence.yaml#/destination'
+  /v1/destinations/{destinationId}/media:
+    $ref: './paths/intelligence.yaml#/media'
+  /v1/trips:
+    $ref: './paths/trips.yaml#/collection'
+  /v1/trips/{tripId}:
+    $ref: './paths/trips.yaml#/item'
+  /v1/trips/{tripId}/itinerary:
+    $ref: './paths/itinerary.yaml#/read'
+  /v1/trips/{tripId}/itinerary/generate:
+    $ref: './paths/itinerary.yaml#/generate'
+  /v1/trips/{tripId}/itinerary/items/{itemId}:
+    $ref: './paths/itinerary.yaml#/item'
+  /v1/trips/{tripId}/budget:
+    $ref: './paths/itinerary.yaml#/budget'
+  /v1/trips/{tripId}/nearby/search:
+    $ref: './paths/itinerary.yaml#/nearby'
+  /v1/trips/{tripId}/active:
+    $ref: './paths/runtime.yaml#/active'
+  /v1/trips/{tripId}/alerts:
+    $ref: './paths/runtime.yaml#/alerts'
+  /v1/trips/{tripId}/alerts/{alertId}:
+    $ref: './paths/runtime.yaml#/alert'
+  /v1/trips/{tripId}/replan:
+    $ref: './paths/runtime.yaml#/replan'
+  /v1/trips/{tripId}/replan/{proposalId}/apply:
+    $ref: './paths/runtime.yaml#/apply'
+  /v1/trips/{tripId}/translate:
+    $ref: './paths/runtime.yaml#/translate'
+  /v1/trips/{tripId}/phrases:
+    $ref: './paths/runtime.yaml#/phrases'
+  /v1/trips/{tripId}/offline-pack:
+    $ref: './paths/runtime.yaml#/offline'
+  /v1/trips/{tripId}/flights/search:
+    $ref: './paths/commerce.yaml#/flights'
+  /v1/trips/{tripId}/stays/search:
+    $ref: './paths/commerce.yaml#/stays'
+  /v1/trips/{tripId}/activities/search:
+    $ref: './paths/commerce.yaml#/activities'
+  /v1/commerce/handoffs:
+    $ref: './paths/commerce.yaml#/handoffs'
+  /v1/me/personalization:
+    $ref: './paths/personalization.yaml#/settings'
+  /v1/me/personalization/insights:
+    $ref: './paths/personalization.yaml#/insights'
+  /v1/me/personalization/insights/{insightId}:
+    $ref: './paths/personalization.yaml#/insight'
+  /v1/trips/{tripId}/feedback:
+    $ref: './paths/personalization.yaml#/feedback'
+  /v1/me/price-watches:
+    $ref: './paths/commerce.yaml#/watches'
+  /v1/me/price-watches/{watchId}:
+    $ref: './paths/commerce.yaml#/watch'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: >-
+        A Sign in with Apple identity token for the configured NUVRO audience. The backend
+        verifies signature, issuer, audience and expiry against Apple's published keys, then
+        resolves or enrols the NUVRO account behind that identity. Development builds may
+        accept an explicitly configured development credential instead; see
+        docs/api/authentication.md.
+  schemas:
+    Liveness:
+      $ref: './components/schemas/system.yaml#/Liveness'
+    Readiness:
+      $ref: './components/schemas/system.yaml#/Readiness'
+    Problem:
+      $ref: './components/schemas/errors.yaml'
+    Money:
+      $ref: './components/schemas/money.yaml'
+    GeoPoint:
+      $ref: './components/schemas/common.yaml#/GeoPoint'
+    DateRange:
+      $ref: './components/schemas/common.yaml#/DateRange'
+    TimeRange:
+      $ref: './components/schemas/common.yaml#/TimeRange'
+    Freshness:
+      $ref: './components/schemas/common.yaml#/Freshness'
+    Attribution:
+      $ref: './components/schemas/common.yaml#/Attribution'
+    MediaAsset:
+      $ref: './components/schemas/media.yaml'
+    MatchScore:
+      $ref: './components/schemas/discover.yaml'
+    Profile:
+      $ref: './components/schemas/profile.yaml#/Profile'
+    ProfilePatch:
+      $ref: './components/schemas/profile.yaml#/ProfilePatch'
+    Preferences:
+      $ref: './components/schemas/profile.yaml#/Preferences'
+    PreferencesPatch:
+      $ref: './components/schemas/profile.yaml#/PreferencesPatch'
+    MatchRequest:
+      $ref: './components/schemas/discovery.yaml#/MatchRequest'
+    MatchResponse:
+      $ref: './components/schemas/discovery.yaml#/MatchResponse'
+    Recommendation:
+      $ref: './components/schemas/discovery.yaml#/Recommendation'
+    DestinationSummary:
+      $ref: './components/schemas/discovery.yaml#/DestinationSummary'
+    PersonalMatch:
+      $ref: './components/schemas/discovery.yaml#/PersonalMatch'
+    Access:
+      $ref: './components/schemas/discovery.yaml#/Access'
+    Affordability:
+      $ref: './components/schemas/discovery.yaml#/Affordability'
+    MatchComponent:
+      $ref: './components/schemas/discovery.yaml#/MatchComponent'
+    CostRange:
+      $ref: './components/schemas/discovery.yaml#/CostRange'
+    Conversion:
+      $ref: './components/schemas/discovery.yaml#/Conversion'
+    FlightSummary:
+      $ref: './components/schemas/discovery.yaml#/FlightSummary'
+    Confidence:
+      $ref: './components/schemas/discovery.yaml#/Confidence'
+    Section:
+      $ref: './components/schemas/intelligence.yaml#/Section'
+    PlaceSummary:
+      $ref: './components/schemas/intelligence.yaml#/PlaceSummary'
+    WeatherObservation:
+      $ref: './components/schemas/intelligence.yaml#/WeatherObservation'
+    WeatherDay:
+      $ref: './components/schemas/intelligence.yaml#/WeatherDay'
+    WeatherWindow:
+      $ref: './components/schemas/intelligence.yaml#/WeatherWindow'
+    DestinationDetail:
+      $ref: './components/schemas/intelligence.yaml#/DestinationDetail'
+    DestinationMedia:
+      $ref: './components/schemas/intelligence.yaml#/DestinationMedia'
+    RouteSummary:
+      $ref: './components/schemas/itinerary.yaml#/RouteSummary'
+    ItineraryItem:
+      $ref: './components/schemas/itinerary.yaml#/ItineraryItem'
+    ItineraryDay:
+      $ref: './components/schemas/itinerary.yaml#/ItineraryDay'
+    Itinerary:
+      $ref: './components/schemas/itinerary.yaml#/Itinerary'
+    Violation:
+      $ref: './components/schemas/itinerary.yaml#/Violation'
+    GenerateItineraryRequest:
+      $ref: './components/schemas/itinerary.yaml#/GenerateItineraryRequest'
+    GenerateItineraryResponse:
+      $ref: './components/schemas/itinerary.yaml#/GenerateItineraryResponse'
+    UpdateItineraryItemRequest:
+      $ref: './components/schemas/itinerary.yaml#/UpdateItineraryItemRequest'
+    BudgetLine:
+      $ref: './components/schemas/itinerary.yaml#/BudgetLine'
+    TripBudget:
+      $ref: './components/schemas/itinerary.yaml#/TripBudget'
+    NearbySearchRequest:
+      $ref: './components/schemas/itinerary.yaml#/NearbySearchRequest'
+    NearbyPlace:
+      $ref: './components/schemas/itinerary.yaml#/NearbyPlace'
+    NearbySearchResponse:
+      $ref: './components/schemas/itinerary.yaml#/NearbySearchResponse'
+    Departure:
+      $ref: './components/schemas/runtime.yaml#/Departure'
+    QuickAction:
+      $ref: './components/schemas/runtime.yaml#/QuickAction'
+    TripAlert:
+      $ref: './components/schemas/runtime.yaml#/TripAlert'
+    ActiveTrip:
+      $ref: './components/schemas/runtime.yaml#/ActiveTrip'
+    UpdateAlertRequest:
+      $ref: './components/schemas/runtime.yaml#/UpdateAlertRequest'
+    AlertList:
+      $ref: './components/schemas/runtime.yaml#/AlertList'
+    ReplanRequest:
+      $ref: './components/schemas/replan.yaml#/ReplanRequest'
+    ReplanChange:
+      $ref: './components/schemas/replan.yaml#/ReplanChange'
+    ReplanProposal:
+      $ref: './components/schemas/replan.yaml#/ReplanProposal'
+    TranslateRequest:
+      $ref: './components/schemas/companion.yaml#/TranslateRequest'
+    Translation:
+      $ref: './components/schemas/companion.yaml#/Translation'
+    Phrase:
+      $ref: './components/schemas/companion.yaml#/Phrase'
+    PhrasePack:
+      $ref: './components/schemas/companion.yaml#/PhrasePack'
+    OfflinePack:
+      $ref: './components/schemas/companion.yaml#/OfflinePack'
+    OfferFreshness:
+      $ref: './components/schemas/commerce.yaml#/OfferFreshness'
+    CommerceDisclosure:
+      $ref: './components/schemas/commerce.yaml#/CommerceDisclosure'
+    OfferBase:
+      $ref: './components/schemas/commerce.yaml#/OfferBase'
+    FlightOffer:
+      $ref: './components/schemas/commerce.yaml#/FlightOffer'
+    StayOffer:
+      $ref: './components/schemas/commerce.yaml#/StayOffer'
+    ActivityOffer:
+      $ref: './components/schemas/commerce.yaml#/ActivityOffer'
+    TransferOffer:
+      $ref: './components/schemas/commerce.yaml#/TransferOffer'
+    PartnerStatus:
+      $ref: './components/schemas/commerce.yaml#/PartnerStatus'
+    SearchStatus:
+      $ref: './components/schemas/commerce.yaml#/SearchStatus'
+    FlightSearchRequest:
+      $ref: './components/schemas/commerce-search.yaml#/FlightSearchRequest'
+    FlightSearchResponse:
+      $ref: './components/schemas/commerce-search.yaml#/FlightSearchResponse'
+    StaySearchRequest:
+      $ref: './components/schemas/commerce-search.yaml#/StaySearchRequest'
+    StaySearchResponse:
+      $ref: './components/schemas/commerce-search.yaml#/StaySearchResponse'
+    ActivitySearchRequest:
+      $ref: './components/schemas/commerce-search.yaml#/ActivitySearchRequest'
+    ActivitySearchResponse:
+      $ref: './components/schemas/commerce-search.yaml#/ActivitySearchResponse'
+    CreateHandoffRequest:
+      $ref: './components/schemas/commerce-search.yaml#/CreateHandoffRequest'
+    BookingHandoff:
+      $ref: './components/schemas/commerce-search.yaml#/BookingHandoff'
+    PriceWatchTarget:
+      $ref: './components/schemas/pricewatch.yaml#/PriceWatchTarget'
+    PriceWatchThreshold:
+      $ref: './components/schemas/pricewatch.yaml#/PriceWatchThreshold'
+    CreatePriceWatchRequest:
+      $ref: './components/schemas/pricewatch.yaml#/CreatePriceWatchRequest'
+    PriceWatch:
+      $ref: './components/schemas/pricewatch.yaml#/PriceWatch'
+    PriceWatchList:
+      $ref: './components/schemas/pricewatch.yaml#/PriceWatchList'
+    PreferenceOrigin:
+      $ref: './components/schemas/personalization.yaml#/PreferenceOrigin'
+    PersonalizationInsight:
+      $ref: './components/schemas/personalization.yaml#/PersonalizationInsight'
+    PersonalizationInsightList:
+      $ref: './components/schemas/personalization.yaml#/PersonalizationInsightList'
+    UpdateInsightRequest:
+      $ref: './components/schemas/personalization.yaml#/UpdateInsightRequest'
+    PersonalizationPreference:
+      $ref: './components/schemas/personalization.yaml#/PersonalizationPreference'
+    PersonalizationSettings:
+      $ref: './components/schemas/personalization.yaml#/PersonalizationSettings'
+    UpdatePersonalizationRequest:
+      $ref: './components/schemas/personalization.yaml#/UpdatePersonalizationRequest'
+    TripFeedbackRequest:
+      $ref: './components/schemas/personalization.yaml#/TripFeedbackRequest'
+    FeedbackAspect:
+      $ref: './components/schemas/personalization.yaml#/FeedbackAspect'
+    TripFeedback:
+      $ref: './components/schemas/personalization.yaml#/TripFeedback'
+    Trip:
+      $ref: './components/schemas/trip.yaml#/Trip'
+    TripInput:
+      $ref: './components/schemas/trip.yaml#/TripInput'
+    TripPatch:
+      $ref: './components/schemas/trip.yaml#/TripPatch'
+    TripPage:
+      $ref: './components/schemas/trip.yaml#/TripPage'

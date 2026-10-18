@@ -1,0 +1,34 @@
+Liveness:
+  type: object
+  additionalProperties: false
+  required: [status, checkedAt]
+  properties:
+    status:
+      type: string
+      enum: [live]
+    checkedAt:
+      type: string
+      format: date-time
+Readiness:
+  type: object
+  additionalProperties: false
+  required: [status, checkedAt, components]
+  properties:
+    status:
+      type: string
+      enum: [ready]
+    checkedAt:
+      type: string
+      format: date-time
+    components:
+      type: array
+      items:
+        type: object
+        additionalProperties: false
+        required: [name, status]
+        properties:
+          name:
+            type: string
+          status:
+            type: string
+            enum: [up]

@@ -1,0 +1,23 @@
+type: object
+title: Money
+description: |
+  Canonical monetary value. Amounts are integer minor units of the currency, never a
+  floating point number. 12550 with currency USD is 125.50 US dollars. Clients format the
+  value for display using the traveller's locale.
+required:
+  - amount_minor
+  - currency
+additionalProperties: false
+properties:
+  amount_minor:
+    type: integer
+    format: int64
+    description: Amount in the minor unit of the currency.
+    examples:
+      - 12550
+  currency:
+    type: string
+    description: ISO 4217 alphabetic currency code.
+    pattern: '^[A-Z]{3}$'
+    examples:
+      - USD

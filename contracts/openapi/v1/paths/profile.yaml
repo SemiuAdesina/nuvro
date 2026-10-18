@@ -1,0 +1,95 @@
+me:
+  get:
+    operationId: getMe
+    summary: Profile of the authenticated traveller
+    responses:
+      '200':
+        description: Profile
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/profile.yaml#/Profile'
+      default:
+        $ref: '../components/responses/problem.yaml'
+  patch:
+    operationId: patchMe
+    summary: Partial update of the profile; omitted fields are unchanged
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/profile.yaml#/ProfilePatch'
+    responses:
+      '200':
+        description: Updated profile
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/profile.yaml#/Profile'
+      default:
+        $ref: '../components/responses/problem.yaml'
+  delete:
+    operationId: deleteMe
+    summary: Close the account and schedule erasure of everything it owns
+    requestBody:
+      required: false
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/profile.yaml#/AccountDeletionRequest'
+    responses:
+      '202':
+        description: Deletion accepted; access ends immediately and erasure follows
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/profile.yaml#/AccountDeletion'
+      default:
+        $ref: '../components/responses/problem.yaml'
+preferences:
+  get:
+    operationId: getPreferences
+    summary: Traveller preferences that feed ranking inputs
+    responses:
+      '200':
+        description: Preferences
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/profile.yaml#/Preferences'
+      default:
+        $ref: '../components/responses/problem.yaml'
+  patch:
+    operationId: patchPreferences
+    summary: Partial update of preferences; omitted fields are unchanged
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/profile.yaml#/PreferencesPatch'
+    responses:
+      '200':
+        description: Updated preferences
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/profile.yaml#/Preferences'
+      default:
+        $ref: '../components/responses/problem.yaml'
+appleIdentity:
+  put:
+    operationId: putAppleIdentity
+    summary: Hand over the Sign in with Apple authorization code so tokens can be revoked on deletion
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/profile.yaml#/AppleIdentityLink'
+    responses:
+      '204':
+        description: The identity was linked
+      default:
+        $ref: '../components/responses/problem.yaml'

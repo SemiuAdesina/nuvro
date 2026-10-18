@@ -1,0 +1,148 @@
+flights:
+  parameters:
+    - name: tripId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+  post:
+    operationId: searchFlightOffers
+    summary: Bookable flight options, ranked on traveller value
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/commerce-search.yaml#/FlightSearchRequest'
+    responses:
+      '200':
+        description: Ranked flight offers
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/commerce-search.yaml#/FlightSearchResponse'
+      default:
+        $ref: '../components/responses/problem.yaml'
+stays:
+  parameters:
+    - name: tripId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+  post:
+    operationId: searchStayOffers
+    summary: Bookable stays, ranked against the itinerary rather than price alone
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/commerce-search.yaml#/StaySearchRequest'
+    responses:
+      '200':
+        description: Ranked stay offers
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/commerce-search.yaml#/StaySearchResponse'
+      default:
+        $ref: '../components/responses/problem.yaml'
+activities:
+  parameters:
+    - name: tripId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+  post:
+    operationId: searchActivityOffers
+    summary: Bookable experiences that fit the traveller's free time and weather
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/commerce-search.yaml#/ActivitySearchRequest'
+    responses:
+      '200':
+        description: Ranked activity offers
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/commerce-search.yaml#/ActivitySearchResponse'
+      default:
+        $ref: '../components/responses/problem.yaml'
+handoffs:
+  post:
+    operationId: createBookingHandoff
+    summary: Create a server-signed partner handoff for a selected offer
+    parameters:
+      - $ref: '../components/parameters/idempotency-key.yaml'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/commerce-search.yaml#/CreateHandoffRequest'
+    responses:
+      '201':
+        description: Handoff created
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/commerce-search.yaml#/BookingHandoff'
+      default:
+        $ref: '../components/responses/problem.yaml'
+watches:
+  get:
+    operationId: listPriceWatches
+    summary: Price watches for the authenticated traveller
+    responses:
+      '200':
+        description: Price watches
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/pricewatch.yaml#/PriceWatchList'
+      default:
+        $ref: '../components/responses/problem.yaml'
+  post:
+    operationId: createPriceWatch
+    summary: Watch a price; requires an active subscription
+    parameters:
+      - $ref: '../components/parameters/idempotency-key.yaml'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/pricewatch.yaml#/CreatePriceWatchRequest'
+    responses:
+      '201':
+        description: Price watch created
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/pricewatch.yaml#/PriceWatch'
+      default:
+        $ref: '../components/responses/problem.yaml'
+watch:
+  parameters:
+    - name: watchId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+  delete:
+    operationId: deletePriceWatch
+    summary: Stop watching a price
+    responses:
+      '204':
+        description: Watch ended
+      default:
+        $ref: '../components/responses/problem.yaml'

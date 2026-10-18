@@ -1,0 +1,280 @@
+RouteSummary:
+  type: object
+  additionalProperties: false
+  required: [status, mode]
+  properties:
+    status:
+      type: string
+      enum: [found, not_found, unsupported, unavailable]
+    mode:
+      type: string
+      enum: [walk, drive, transit, bike]
+    distanceMeters:
+      type: integer
+      minimum: 0
+    durationSeconds:
+      type: integer
+      minimum: 0
+    confidence:
+      type: string
+      enum: [high, medium, low, unknown]
+ItineraryItem:
+  type: object
+  additionalProperties: false
+  required: [id, day, startAt, endAt, kind, title, status, source, userLocked, reservationLocked, weatherImpact]
+  properties:
+    id:
+      type: string
+      format: uuid
+    day:
+      type: integer
+      minimum: 1
+    startAt:
+      type: string
+      format: date-time
+    endAt:
+      type: string
+      format: date-time
+    kind:
+      type: string
+      enum: [activity, meal, rest, transfer, note]
+    title:
+      type: string
+      maxLength: 300
+    placeId:
+      type: string
+    category:
+      type: string
+    location:
+      $ref: './common.yaml#/GeoPoint'
+    routeFromPrevious:
+      $ref: '#/RouteSummary'
+    weatherImpact:
+      type: string
+      enum: [none, low, moderate, high, unknown]
+    estimatedCost:
+      $ref: './money.yaml'
+    status:
+      type: string
+      enum: [planned, reserved, completed, skipped, cancelled]
+    source:
+      type: string
+      enum: [generated, traveller]
+    userLocked:
+      type: boolean
+    reservationLocked:
+      type: boolean
+ItineraryDay:
+  type: object
+  additionalProperties: false
+  required: [day, date, items]
+  properties:
+    day:
+      type: integer
+      minimum: 1
+    date:
+      type: string
+      format: date
+    items:
+      type: array
+      maxItems: 20
+      items:
+        $ref: '#/ItineraryItem'
+Itinerary:
+  type: object
+  additionalProperties: false
+  required: [tripId, timezone, version, algorithmVersion, generatedAt, days]
+  properties:
+    id:
+      type: string
+      format: uuid
+    tripId:
+      type: string
+      format: uuid
+    timezone:
+      type: string
+    version:
+      type: integer
+      minimum: 1
+    algorithmVersion:
+      type: string
+    generatedAt:
+      type: string
+      format: date-time
+    days:
+      type: array
+      maxItems: 90
+      items:
+        $ref: '#/ItineraryDay'
+Violation:
+  type: object
+  additionalProperties: false
+  required: [code]
+  properties:
+    code:
+      type: string
+      enum: [overlapping_items, travel_time_not_feasible, outside_trip_dates, place_closed, weather_blocked, place_not_resolved, invalid_item, locked_item_moved]
+    itemId:
+      type: string
+    detail:
+      type: string
+GenerateItineraryRequest:
+  type: object
+  additionalProperties: false
+  properties:
+    pace:
+      type: string
+      enum: [relaxed, balanced, packed]
+    language:
+      type: string
+      maxLength: 16
+GenerateItineraryResponse:
+  type: object
+  additionalProperties: false
+  required: [itinerary, violations, candidates]
+  properties:
+    itinerary:
+      $ref: '#/Itinerary'
+    violations:
+      type: array
+      maxItems: 50
+      items:
+        $ref: '#/Violation'
+    candidates:
+      type: integer
+      minimum: 0
+UpdateItineraryItemRequest:
+  type: object
+  additionalProperties: false
+  properties:
+    startAt:
+      type: string
+      format: date-time
+    endAt:
+      type: string
+      format: date-time
+    title:
+      type: string
+      minLength: 1
+      maxLength: 300
+    status:
+      type: string
+      enum: [planned, reserved, completed, skipped, cancelled]
+    userLocked:
+      type: boolean
+BudgetLine:
+  type: object
+  additionalProperties: false
+  required: [category, confidence]
+  properties:
+    category:
+      type: string
+      enum: [flight, stay, food, activities, local_transport, entry, connectivity, other, buffer]
+    estimated:
+      $ref: './discovery.yaml#/CostRange'
+    booked:
+      $ref: './money.yaml'
+    confidence:
+      type: string
+      enum: [high, medium, low, unknown]
+    source:
+      type: string
+    observedAt:
+      type: string
+      format: date-time
+TripBudget:
+  type: object
+  additionalProperties: false
+  required: [currency, categories, confidence, calculatedAt]
+  properties:
+    currency:
+      type: string
+      pattern: '^[A-Z]{3}$'
+    tripBudget:
+      $ref: './money.yaml'
+    estimatedTotal:
+      $ref: './discovery.yaml#/CostRange'
+    bookedTotal:
+      $ref: './money.yaml'
+    remaining:
+      $ref: './money.yaml'
+    categories:
+      type: array
+      maxItems: 20
+      items:
+        $ref: '#/BudgetLine'
+    confidence:
+      type: string
+      enum: [high, medium, low, unknown]
+    calculatedAt:
+      type: string
+      format: date-time
+NearbySearchRequest:
+  type: object
+  additionalProperties: false
+  required: [location]
+  properties:
+    location:
+      $ref: './common.yaml#/GeoPoint'
+    categories:
+      type: array
+      maxItems: 10
+      items:
+        type: string
+        enum: [restaurant, cafe, attraction, museum, park, beach, market, nightlife, shopping, viewpoint, transport, hotel, experience, other]
+    radiusMeters:
+      type: integer
+      minimum: 100
+      maximum: 20000
+    openNow:
+      type: boolean
+    availableMinutes:
+      type: integer
+      minimum: 0
+      maximum: 1440
+    language:
+      type: string
+      maxLength: 16
+    limit:
+      type: integer
+      minimum: 1
+      maximum: 20
+NearbyPlace:
+  type: object
+  additionalProperties: false
+  required: [place, score, fitsAvailableTime, reasons, weatherImpact]
+  properties:
+    place:
+      $ref: './intelligence.yaml#/PlaceSummary'
+    score:
+      type: integer
+      minimum: 0
+      maximum: 100
+    fitsAvailableTime:
+      type: boolean
+    travelMinutes:
+      type: integer
+      minimum: 0
+    weatherImpact:
+      type: string
+      enum: [none, low, moderate, high, unknown]
+    reasons:
+      type: array
+      maxItems: 10
+      items:
+        type: string
+NearbySearchResponse:
+  type: object
+  additionalProperties: false
+  required: [places, availableMinutes]
+  properties:
+    places:
+      type: array
+      maxItems: 20
+      items:
+        $ref: '#/NearbyPlace'
+    availableMinutes:
+      type: integer
+      minimum: 0
+    nextItem:
+      $ref: '#/ItineraryItem'

@@ -1,0 +1,48 @@
+sessions:
+  post:
+    operationId: createSession
+    summary: Exchange a verified identity credential for a NUVRO session
+    security: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/auth.yaml#/SessionRequest'
+    responses:
+      '201':
+        description: Session issued
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/auth.yaml#/Session'
+      default:
+        $ref: '../components/responses/problem.yaml'
+  delete:
+    operationId: deleteSession
+    summary: Sign out the session named by the bearer credential
+    responses:
+      '204':
+        description: The session is revoked
+      default:
+        $ref: '../components/responses/problem.yaml'
+refresh:
+  post:
+    operationId: refreshSession
+    summary: Rotate a refresh token into a new session
+    security: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/auth.yaml#/RefreshRequest'
+    responses:
+      '201':
+        description: Session rotated
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/auth.yaml#/Session'
+      default:
+        $ref: '../components/responses/problem.yaml'

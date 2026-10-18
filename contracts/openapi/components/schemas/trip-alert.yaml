@@ -1,0 +1,32 @@
+type: object
+title: TripAlert
+description: |
+  A trip-relevant alert with an explicit reason. Severity is a written label so it never relies
+  on colour alone. Entry-requirement alerts must originate from trusted provider data.
+required: [id, priority, kind, severity, title, body, reason, action_label, destination]
+additionalProperties: false
+properties:
+  id:
+    type: string
+  priority:
+    type: string
+    enum: [now, today, later]
+  kind:
+    type: string
+    enum: [weather, flight, activity, document, summary]
+  severity:
+    type: string
+    enum: [action_needed, on_time, reminder, updated]
+  title:
+    type: string
+  body:
+    type: string
+  reason:
+    type: string
+    examples:
+      - Affects your Day 3 itinerary
+  action_label:
+    type: string
+  destination:
+    type: string
+    enum: [replanning, travel_mode, document, summary]

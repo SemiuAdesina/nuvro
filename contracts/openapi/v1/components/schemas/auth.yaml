@@ -1,0 +1,44 @@
+SessionRequest:
+  type: object
+  additionalProperties: false
+  required: [identityToken]
+  properties:
+    identityToken:
+      type: string
+      minLength: 1
+      maxLength: 8192
+      description: A verified identity credential, such as the Sign in with Apple identity token. It is exchanged once for a NUVRO session and never reused as a bearer credential.
+    authorizationCode:
+      type: string
+      minLength: 1
+      maxLength: 512
+      description: The single-use Sign in with Apple authorization code, so tokens can be revoked when the account is deleted.
+
+RefreshRequest:
+  type: object
+  additionalProperties: false
+  required: [refreshToken]
+  properties:
+    refreshToken:
+      type: string
+      minLength: 1
+      maxLength: 8192
+
+Session:
+  type: object
+  additionalProperties: false
+  required: [accessToken, refreshToken, expiresAt, accountId]
+  properties:
+    accessToken:
+      type: string
+      description: Short-lived bearer credential for every product operation.
+    refreshToken:
+      type: string
+      description: Single-use. Each refresh returns a new one; presenting a used one revokes the whole session family.
+    expiresAt:
+      type: string
+      format: date-time
+      description: When the access token stops being accepted.
+    accountId:
+      type: string
+      format: uuid

@@ -1,0 +1,82 @@
+version: "2"
+
+run:
+  timeout: 5m
+  tests: true
+
+linters:
+  default: none
+  enable:
+    - bodyclose
+    - contextcheck
+    - dupl
+    - errcheck
+    - errorlint
+    - funlen
+    - gocognit
+    - gocyclo
+    - gosec
+    - govet
+    - ineffassign
+    - misspell
+    - noctx
+    - nilerr
+    - predeclared
+    - rowserrcheck
+    - staticcheck
+    - unconvert
+    - unparam
+    - unused
+    - usetesting
+    - wastedassign
+
+  settings:
+    dupl:
+      threshold: 180
+    funlen:
+      lines: 60
+      statements: 40
+    gocognit:
+      min-complexity: 20
+    gocyclo:
+      min-complexity: 12
+    errcheck:
+      check-type-assertions: true
+      check-blank: false
+    govet:
+      enable:
+        - shadow
+    staticcheck:
+      checks:
+        - all
+        - -ST1000
+        - -ST1020
+        - -ST1021
+        - -ST1022
+
+  exclusions:
+    generated: strict
+    rules:
+      - path: _test\.go
+        linters:
+          - dupl
+          - funlen
+          - gocognit
+          - gosec
+      - path: internal/app/
+        linters:
+          - contextcheck
+      - path: internal/transport/http/middleware/recover\.go
+        linters:
+          - contextcheck
+      - path: tests/contract/
+        linters:
+          - gosec
+
+formatters:
+  enable:
+    - gofmt
+
+issues:
+  max-issues-per-linter: 0
+  max-same-issues: 0

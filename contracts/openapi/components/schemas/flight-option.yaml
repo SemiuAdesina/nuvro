@@ -1,0 +1,29 @@
+type: object
+title: FlightOption
+description: A ranked flight tier. Prices are observed fares with a checked timestamp, never guaranteed.
+required: [tier, airline, departs, arrives, duration, stops_label, stop_count, price, reason, baggage, checked_label]
+additionalProperties: false
+properties:
+  tier:
+    type: string
+    enum: [best_overall, lowest_price, easiest_journey]
+  airline:
+    type: string
+  departs:
+    type: string
+  arrives:
+    type: string
+  duration:
+    type: string
+  stops_label:
+    type: string
+  stop_count:
+    type: integer
+  price:
+    $ref: './money.yaml'
+  reason:
+    type: string
+  baggage:
+    type: string
+  checked_label:
+    type: string

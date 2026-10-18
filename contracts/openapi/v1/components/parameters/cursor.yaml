@@ -1,0 +1,7 @@
+name: cursor
+in: query
+description: Opaque cursor returned by a previous page. Never constructed by a client.
+schema:
+  type: string
+  minLength: 1
+  maxLength: 512

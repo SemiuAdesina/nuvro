@@ -1,0 +1,60 @@
+name: ios
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'clients/ios/**'
+      - 'contracts/**'
+      - '.github/workflows/ios.yml'
+  pull_request:
+    paths:
+      - 'clients/ios/**'
+      - 'contracts/**'
+      - '.github/workflows/ios.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ios-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  nuvrokit:
+    name: NuvroKit package
+    runs-on: macos-26
+    defaults:
+      run:
+        working-directory: clients/ios/Packages/NuvroKit
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Show the toolchain
+        run: swift --version
+
+      - name: Build
+        run: swift build
+
+      - name: Test
+        run: swift test
+
+  application:
+    name: Nuvro application
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install xcodegen
+        run: brew install xcodegen
+
+      - name: Generate the Xcode project from the committed spec
+        working-directory: clients/ios/App
+        run: xcodegen generate
+
+      - name: Build for the simulator
+        working-directory: clients/ios/App
+        run: |
+          xcodebuild -project Nuvro.xcodeproj -scheme Nuvro \
+            -destination 'generic/platform=iOS Simulator' \
+            -skipMacroValidation -skipPackagePluginValidation CODE_SIGNING_ALLOWED=NO build

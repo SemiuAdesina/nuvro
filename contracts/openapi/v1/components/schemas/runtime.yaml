@@ -1,0 +1,135 @@
+Departure:
+  type: object
+  additionalProperties: false
+  required: [status]
+  description: Deterministic leave-time evidence; never present without a known route
+  properties:
+    status:
+      type: string
+      enum: [on_time, leave_soon, leave_now, likely_late, route_unavailable, no_upcoming_item]
+    leaveBy:
+      type: string
+      format: date-time
+    minutesUntilLeave:
+      type: integer
+    arrivalBufferMinutes:
+      type: integer
+      minimum: 0
+    route:
+      $ref: './itinerary.yaml#/RouteSummary'
+QuickAction:
+  type: object
+  additionalProperties: false
+  required: [type, enabled]
+  properties:
+    type:
+      type: string
+      enum: [navigate, ticket, translate, review_plan]
+    resourceId:
+      type: string
+    enabled:
+      type: boolean
+TripAlert:
+  type: object
+  additionalProperties: false
+  required: [id, tripId, type, severity, titleCode, action, status, effectiveAt]
+  description: Structured alert; clients render copy from titleCode and messageData
+  properties:
+    id:
+      type: string
+      format: uuid
+    tripId:
+      type: string
+      format: uuid
+    type:
+      type: string
+      enum: [weather_impact, leave_reminder, schedule_conflict, place_change, reservation_reminder, document_reminder, entry_reminder]
+    severity:
+      type: string
+      enum: [info, attention, important]
+    titleCode:
+      type: string
+    messageData:
+      type: object
+      additionalProperties:
+        type: string
+    relatedItemId:
+      type: string
+    action:
+      type: string
+      enum: [adjust_plan, navigate, view_activity, view_document, none]
+    status:
+      type: string
+      enum: [unread, read, resolved, expired]
+    effectiveAt:
+      type: string
+      format: date-time
+    expiresAt:
+      type: string
+      format: date-time
+    freshness:
+      $ref: './common.yaml#/Freshness'
+ActiveTrip:
+  type: object
+  additionalProperties: false
+  required: [tripId, timezone, localNow, phase, currentDay, today, departure, actions, alerts, generatedAt]
+  properties:
+    tripId:
+      type: string
+      format: uuid
+    timezone:
+      type: string
+      description: IANA identifier of the destination
+    localNow:
+      type: string
+      format: date-time
+    phase:
+      type: string
+      enum: [before_trip, during_trip, after_trip]
+    currentDay:
+      type: integer
+      minimum: 0
+    today:
+      type: array
+      maxItems: 20
+      items:
+        $ref: './itinerary.yaml#/ItineraryItem'
+    nextItem:
+      $ref: './itinerary.yaml#/ItineraryItem'
+    departure:
+      $ref: '#/Departure'
+    weather:
+      $ref: './intelligence.yaml#/WeatherWindow'
+    weatherFreshness:
+      $ref: './common.yaml#/Freshness'
+    actions:
+      type: array
+      maxItems: 8
+      items:
+        $ref: '#/QuickAction'
+    alerts:
+      type: array
+      maxItems: 20
+      items:
+        $ref: '#/TripAlert'
+    generatedAt:
+      type: string
+      format: date-time
+UpdateAlertRequest:
+  type: object
+  additionalProperties: false
+  required: [status]
+  properties:
+    status:
+      type: string
+      enum: [read, resolved]
+AlertList:
+  type: object
+  additionalProperties: false
+  required: [alerts]
+  properties:
+    alerts:
+      type: array
+      maxItems: 100
+      items:
+        $ref: '#/TripAlert'

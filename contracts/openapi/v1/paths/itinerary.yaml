@@ -1,0 +1,124 @@
+generate:
+  parameters:
+    - name: tripId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+  post:
+    operationId: generateItinerary
+    summary: Build a validated itinerary from real places, routes and forecast evidence
+    requestBody:
+      required: false
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/itinerary.yaml#/GenerateItineraryRequest'
+    responses:
+      '200':
+        description: Generated itinerary with any validation findings
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/itinerary.yaml#/GenerateItineraryResponse'
+      default:
+        $ref: '../components/responses/problem.yaml'
+read:
+  parameters:
+    - name: tripId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+  get:
+    operationId: getItinerary
+    summary: Stored itinerary for a trip
+    responses:
+      '200':
+        description: Itinerary
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/itinerary.yaml#/Itinerary'
+      default:
+        $ref: '../components/responses/problem.yaml'
+item:
+  parameters:
+    - name: tripId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    - name: itemId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+  patch:
+    operationId: patchItineraryItem
+    summary: Adjust one itinerary item
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/itinerary.yaml#/UpdateItineraryItemRequest'
+    responses:
+      '200':
+        description: Updated item
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/itinerary.yaml#/ItineraryItem'
+      default:
+        $ref: '../components/responses/problem.yaml'
+budget:
+  parameters:
+    - name: tripId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+  get:
+    operationId: getTripBudget
+    summary: Trip budget in the traveller's currency
+    responses:
+      '200':
+        description: Trip budget
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/itinerary.yaml#/TripBudget'
+      default:
+        $ref: '../components/responses/problem.yaml'
+nearby:
+  parameters:
+    - name: tripId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+  post:
+    operationId: searchNearby
+    summary: Context-aware nearby places for the time the traveller actually has
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/itinerary.yaml#/NearbySearchRequest'
+    responses:
+      '200':
+        description: Ranked nearby places
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/itinerary.yaml#/NearbySearchResponse'
+      default:
+        $ref: '../components/responses/problem.yaml'

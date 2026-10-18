@@ -1,0 +1,19 @@
+matches:
+  post:
+    operationId: discoverMatches
+    summary: Ranked destinations for this traveller, this budget and these dates
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/discovery.yaml#/MatchRequest'
+    responses:
+      '200':
+        description: Ranked recommendations with feasibility evidence
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/discovery.yaml#/MatchResponse'
+      default:
+        $ref: '../components/responses/problem.yaml'

@@ -1,0 +1,8 @@
+name: X-Request-Id
+in: header
+required: false
+description: |
+  Correlation identifier. The backend always issues its own identifier and returns it on the
+  response. A value supplied by the caller is not trusted and is not echoed back.
+schema:
+  type: string

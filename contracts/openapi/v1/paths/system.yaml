@@ -1,0 +1,34 @@
+live:
+  get:
+    operationId: getLiveness
+    security: []
+    summary: Process liveness without dependency I/O
+    responses:
+      '200':
+        description: Process is alive
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/system.yaml#/Liveness'
+      default:
+        $ref: '../components/responses/problem.yaml'
+ready:
+  get:
+    operationId: getReadiness
+    security: []
+    summary: Required configured dependencies are available
+    responses:
+      '200':
+        description: Ready
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/system.yaml#/Readiness'
+      '503':
+        description: Required dependency unavailable
+        content:
+          application/problem+json:
+            schema:
+              $ref: '../components/schemas/errors.yaml'
+      default:
+        $ref: '../components/responses/problem.yaml'

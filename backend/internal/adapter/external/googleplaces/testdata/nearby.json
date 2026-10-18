@@ -1,0 +1,52 @@
+{
+  "places": [
+    {
+      "id": "SYNTHETIC_PLACE_A",
+      "displayName": {"text": "Mercado dos Lavradores", "languageCode": "pt"},
+      "formattedAddress": "Rua Latino Coelho, Funchal",
+      "location": {"latitude": 32.6478, "longitude": -16.9048},
+      "primaryType": "market",
+      "types": ["market", "tourist_attraction", "point_of_interest"],
+      "rating": 4.3,
+      "userRatingCount": 18422,
+      "priceLevel": "PRICE_LEVEL_INEXPENSIVE",
+      "currentOpeningHours": {"openNow": true},
+      "regularOpeningHours": {
+        "openNow": true,
+        "periods": [
+          {"open": {"day": 3, "hour": 7, "minute": 0}, "close": {"day": 3, "hour": 20, "minute": 0}},
+          {"open": {"day": 4, "hour": 7, "minute": 0}, "close": {"day": 4, "hour": 20, "minute": 0}}
+        ]
+      },
+      "photos": [
+        {
+          "name": "places/SYNTHETIC_PLACE_A/photos/SYNTHETIC_PHOTO_1",
+          "widthPx": 4032,
+          "heightPx": 3024,
+          "authorAttributions": [{"displayName": "A Contributor", "uri": "https://example.invalid/contributor"}]
+        }
+      ]
+    },
+    {
+      "id": "SYNTHETIC_PLACE_B",
+      "displayName": {"text": "Museu de Arte", "languageCode": "pt"},
+      "location": {"latitude": 32.6501, "longitude": -16.9101},
+      "primaryType": "museum",
+      "types": ["museum"],
+      "rating": 4.6,
+      "userRatingCount": 900,
+      "currentOpeningHours": {"openNow": false}
+    },
+    {
+      "id": "",
+      "displayName": {"text": "Nameless"},
+      "location": {"latitude": 0, "longitude": 0}
+    },
+    {
+      "id": "SYNTHETIC_PLACE_D",
+      "displayName": {"text": "Out Of Range"},
+      "location": {"latitude": 999, "longitude": -16.9},
+      "primaryType": "cafe"
+    }
+  ]
+}

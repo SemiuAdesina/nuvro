@@ -1,0 +1,23 @@
+{
+  "id": "SYNTHETIC_PLACE_A",
+  "displayName": {"text": "Mercado dos Lavradores"},
+  "formattedAddress": "Rua Latino Coelho, Funchal",
+  "location": {"latitude": 32.6478, "longitude": -16.9048},
+  "primaryType": "market",
+  "types": ["market"],
+  "rating": 9.9,
+  "userRatingCount": -5,
+  "priceLevel": "PRICE_LEVEL_UNSPECIFIED",
+  "regularOpeningHours": {
+    "periods": [
+      {"open": {"day": 0, "hour": 9, "minute": 30}, "close": {"day": 0, "hour": 0, "minute": 0}},
+      {"open": {"day": 1, "hour": 25, "minute": 0}, "close": {"day": 1, "hour": 26, "minute": 0}}
+    ]
+  },
+  "photos": [
+    {"name": "places/SYNTHETIC_PLACE_A/photos/P1", "widthPx": 1600, "heightPx": 900,
+     "authorAttributions": [{"displayName": "First Author", "uri": "https://example.invalid/one"}]},
+    {"name": "places/SYNTHETIC_PLACE_A/photos/P2", "widthPx": 0, "heightPx": 0,
+     "authorAttributions": [{"displayName": "Second Author"}]}
+  ]
+}

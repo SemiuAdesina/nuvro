@@ -1,0 +1,31 @@
+type: object
+additionalProperties: false
+required: [url, width, height, aspectRatio, attribution]
+properties:
+  url:
+    type: string
+    format: uri
+  width:
+    type: integer
+    minimum: 1
+  height:
+    type: integer
+    minimum: 1
+  aspectRatio:
+    type: number
+    exclusiveMinimum: 0
+  dominantColor:
+    type: string
+    pattern: '^#[0-9a-fA-F]{6}$'
+  altText:
+    type: string
+  attribution:
+    type: array
+    maxItems: 10
+    items:
+      $ref: './common.yaml#/Attribution'
+  expiresAt:
+    type: string
+    format: date-time
+  freshness:
+    $ref: './common.yaml#/Freshness'

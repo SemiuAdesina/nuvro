@@ -1,0 +1,69 @@
+type: object
+title: TravelProfile
+description: |
+  A traveller's permanent travel context collected once in Travel Setup and editable from
+  Profile. Residence, passport countries, departure airport and currency are independent facts
+  and are never inferred from one another. The client sends preferences only; visa eligibility,
+  entry rules, affordability ranking and destination access are computed by the backend
+  (E15 Travel Feasibility with E11 and E12), never on the device. No passport numbers, expiry
+  dates or scans are ever collected.
+required: [country_of_residence, passport_countries, has_declined_passport, residence_permits, preferred_currency, travel_paperwork_preference, travel_interests, travel_pace, weather_preference, crowd_preference, flight_preference, stay_preference, typical_travel_group, accessibility_preferences]
+additionalProperties: false
+properties:
+  country_of_residence:
+    type: string
+    description: ISO 3166-1 alpha-2 region code.
+  passport_countries:
+    type: array
+    items:
+      type: string
+    description: ISO 3166-1 alpha-2 codes. Empty only when has_declined_passport is true; entry confidence is then incomplete.
+  has_declined_passport:
+    type: boolean
+  residence_permits:
+    type: array
+    items:
+      type: string
+    description: Region codes or zone identifiers such as SCHENGEN. Profile context only.
+  preferred_departure_airport:
+    type: string
+    description: IATA code.
+  preferred_currency:
+    type: string
+    description: ISO 4217 code. The primary display currency throughout the client.
+  travel_paperwork_preference:
+    type: string
+    enum: [keep_simple, evisa_fine, any_destination]
+  travel_interests:
+    type: array
+    items:
+      type: string
+  travel_pace:
+    type: string
+    enum: [relaxed, balanced, full]
+  weather_preference:
+    type: array
+    items:
+      type: string
+      enum: [warm, mild, cool, cold_snow, no_preference]
+  crowd_preference:
+    type: string
+    enum: [quiet, balanced, crowds_fine]
+  flight_preference:
+    type: array
+    items:
+      type: string
+      enum: [fewer_stops, avoid_overnight, shortest, lowest_price, no_preference]
+  stay_preference:
+    type: array
+    items:
+      type: string
+      enum: [quiet_neighbourhood, central, near_nightlife, near_beach, hotel, apartment, resort, budget_friendly, premium]
+  typical_travel_group:
+    type: string
+    enum: [solo, partner, friends, family, it_changes]
+  accessibility_preferences:
+    type: array
+    items:
+      type: string
+      enum: [no_requirements, mobility, wheelchair_access, reduced_walking, vision, hearing, other]

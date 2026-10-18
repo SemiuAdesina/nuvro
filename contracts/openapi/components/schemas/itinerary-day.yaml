@@ -1,0 +1,47 @@
+type: object
+title: ItineraryDay
+description: One day of a trip plan. Times are destination-local and already formatted.
+required: [day_number, title, summary, activities]
+additionalProperties: false
+properties:
+  day_number:
+    type: integer
+    minimum: 1
+  title:
+    type: string
+    examples:
+      - Day 2 — Funchal
+  summary:
+    type: string
+  departure_travel:
+    type: string
+    description: Travel from the stay to the first activity, already formatted.
+    examples:
+      - 12 min walk
+  activities:
+    type: array
+    items:
+      type: object
+      required: [time, title, detail, is_outdoor]
+      additionalProperties: false
+      properties:
+        time:
+          type: string
+          examples:
+            - "10:00"
+        title:
+          type: string
+        detail:
+          type: string
+        photo_reference:
+          type: string
+        status:
+          type: string
+          enum: [booked, reserved, ticket, weather]
+        travel_to_next:
+          type: string
+          description: Travel estimate to the following activity, already formatted.
+          examples:
+            - 12 min walk
+        is_outdoor:
+          type: boolean

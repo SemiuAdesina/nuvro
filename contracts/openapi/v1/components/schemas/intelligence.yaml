@@ -1,0 +1,165 @@
+Section:
+  type: object
+  additionalProperties: false
+  required: [status]
+  description: Per-section availability so one failing source cannot fail the page
+  properties:
+    status:
+      type: string
+      enum: [available, unavailable, not_applicable]
+    reason:
+      type: string
+    freshness:
+      $ref: './common.yaml#/Freshness'
+PlaceSummary:
+  type: object
+  additionalProperties: false
+  required: [id, name, category, location, openingStatus]
+  properties:
+    id:
+      type: string
+    name:
+      type: string
+    category:
+      type: string
+      enum: [restaurant, cafe, attraction, museum, park, beach, market, nightlife, shopping, viewpoint, transport, hotel, experience, other]
+    location:
+      $ref: './common.yaml#/GeoPoint'
+    address:
+      type: string
+    rating:
+      type: number
+      minimum: 0
+      maximum: 5
+    reviewCount:
+      type: integer
+      minimum: 0
+    priceLevel:
+      type: integer
+      minimum: 0
+      maximum: 4
+    openingStatus:
+      type: string
+      enum: [open, closed, unknown]
+    typicalMinutes:
+      type: integer
+      minimum: 0
+    media:
+      type: array
+      maxItems: 5
+      items:
+        $ref: './media.yaml'
+    attribution:
+      type: array
+      maxItems: 10
+      items:
+        $ref: './common.yaml#/Attribution'
+WeatherObservation:
+  type: object
+  additionalProperties: false
+  required: [at, condition, temperatureCelsius]
+  properties:
+    at:
+      type: string
+      format: date-time
+    condition:
+      type: string
+      enum: [clear, cloudy, rain, heavy_rain, snow, storm, fog, wind, unknown]
+    temperatureCelsius:
+      type: number
+    feelsLikeCelsius:
+      type: number
+    precipitationChance:
+      type: integer
+      minimum: 0
+      maximum: 100
+    windKilometresPerHour:
+      type: number
+    humidityPercent:
+      type: integer
+      minimum: 0
+      maximum: 100
+    uvIndex:
+      type: integer
+      minimum: 0
+WeatherDay:
+  type: object
+  additionalProperties: false
+  required: [date, condition, highCelsius, lowCelsius]
+  properties:
+    date:
+      type: string
+      format: date
+    condition:
+      type: string
+      enum: [clear, cloudy, rain, heavy_rain, snow, storm, fog, wind, unknown]
+    highCelsius:
+      type: number
+    lowCelsius:
+      type: number
+    precipitationChance:
+      type: integer
+      minimum: 0
+      maximum: 100
+WeatherWindow:
+  type: object
+  additionalProperties: false
+  required: [availability]
+  properties:
+    availability:
+      type: string
+      enum: [available, beyond_forecast_horizon, unavailable]
+    current:
+      $ref: '#/WeatherObservation'
+    hourly:
+      type: array
+      maxItems: 240
+      items:
+        $ref: '#/WeatherObservation'
+    daily:
+      type: array
+      maxItems: 10
+      items:
+        $ref: '#/WeatherDay'
+DestinationDetail:
+  type: object
+  additionalProperties: false
+  required: [destination, generatedAt, weather, weatherSection, thingsToDo, placesSection, media, mediaSection]
+  properties:
+    destination:
+      $ref: './discovery.yaml#/DestinationSummary'
+    generatedAt:
+      type: string
+      format: date-time
+    weather:
+      $ref: '#/WeatherWindow'
+    weatherSection:
+      $ref: '#/Section'
+    thingsToDo:
+      type: array
+      maxItems: 20
+      items:
+        $ref: '#/PlaceSummary'
+    placesSection:
+      $ref: '#/Section'
+    media:
+      type: array
+      maxItems: 10
+      items:
+        $ref: './media.yaml'
+    mediaSection:
+      $ref: '#/Section'
+DestinationMedia:
+  type: object
+  additionalProperties: false
+  required: [destinationId, media, section]
+  properties:
+    destinationId:
+      type: string
+    media:
+      type: array
+      maxItems: 10
+      items:
+        $ref: './media.yaml'
+    section:
+      $ref: '#/Section'

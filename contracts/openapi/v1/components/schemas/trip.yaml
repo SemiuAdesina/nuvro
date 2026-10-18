@@ -1,0 +1,121 @@
+Trip:
+  type: object
+  additionalProperties: false
+  required: [id, ownerId, status, destinationId, originAirport, startDate, endDate, adults, children, preferredCurrency, createdAt, updatedAt]
+  properties:
+    id:
+      type: string
+      format: uuid
+    ownerId:
+      type: string
+      format: uuid
+    status:
+      type: string
+      enum: [draft, planning, upcoming, active, completed, cancelled, archived]
+    destinationId:
+      type: [string, 'null']
+      minLength: 1
+      maxLength: 200
+    originAirport:
+      type: [string, 'null']
+      pattern: '^[A-Z]{3}$'
+    startDate:
+      type: [string, 'null']
+      format: date
+    endDate:
+      type: [string, 'null']
+      format: date
+      description: Present exactly when startDate is present, never before it
+    adults:
+      type: integer
+      minimum: 1
+      maximum: 100
+    children:
+      type: integer
+      minimum: 0
+      maximum: 100
+    preferredCurrency:
+      type: string
+      pattern: '^[A-Z]{3}$'
+    createdAt:
+      type: string
+      format: date-time
+    updatedAt:
+      type: string
+      format: date-time
+TripInput:
+  type: object
+  additionalProperties: false
+  required: [adults, preferredCurrency]
+  description: Ownership comes from the authenticated principal, never from the body.
+  properties:
+    destinationId:
+      type: [string, 'null']
+      minLength: 1
+      maxLength: 200
+    originAirport:
+      type: [string, 'null']
+      pattern: '^[A-Z]{3}$'
+    startDate:
+      type: [string, 'null']
+      format: date
+    endDate:
+      type: [string, 'null']
+      format: date
+    adults:
+      type: integer
+      minimum: 1
+      maximum: 100
+    children:
+      type: integer
+      minimum: 0
+      maximum: 100
+      default: 0
+    preferredCurrency:
+      type: string
+      pattern: '^[A-Z]{3}$'
+TripPatch:
+  type: object
+  additionalProperties: false
+  description: >-
+    Omitted fields are unchanged. destinationId and originAirport accept explicit null to
+    clear. startDate and endDate are changed together: both dates or both null.
+  properties:
+    destinationId:
+      type: [string, 'null']
+      minLength: 1
+      maxLength: 200
+    originAirport:
+      type: [string, 'null']
+      pattern: '^[A-Z]{3}$'
+    startDate:
+      type: [string, 'null']
+      format: date
+    endDate:
+      type: [string, 'null']
+      format: date
+    adults:
+      type: integer
+      minimum: 1
+      maximum: 100
+    children:
+      type: integer
+      minimum: 0
+      maximum: 100
+    preferredCurrency:
+      type: string
+      pattern: '^[A-Z]{3}$'
+TripPage:
+  type: object
+  additionalProperties: false
+  required: [items, hasMore]
+  properties:
+    items:
+      type: array
+      items:
+        $ref: '#/Trip'
+    nextCursor:
+      type: string
+      description: Present only when hasMore is true
+    hasMore:
+      type: boolean

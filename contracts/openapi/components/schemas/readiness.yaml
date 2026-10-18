@@ -1,0 +1,36 @@
+type: object
+title: Readiness
+required:
+  - status
+  - checked_at
+  - components
+additionalProperties: false
+properties:
+  status:
+    type: string
+    enum:
+      - ready
+      - unready
+  checked_at:
+    type: string
+    format: date-time
+    description: UTC RFC3339 instant at which the probe answered.
+  components:
+    type: array
+    description: One entry per registered component probe.
+    items:
+      type: object
+      required:
+        - name
+        - status
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+          examples:
+            - postgres
+        status:
+          type: string
+          enum:
+            - up
+            - down

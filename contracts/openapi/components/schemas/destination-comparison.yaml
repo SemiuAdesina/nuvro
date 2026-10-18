@@ -1,0 +1,54 @@
+type: object
+title: DestinationComparison
+description: |
+  A two-destination comparison over the traveller's own criteria. Winners are stated per metric
+  so the client can say "better" in words rather than rely on colour.
+required: [subtitle, columns, metrics, differences]
+additionalProperties: false
+properties:
+  subtitle:
+    type: string
+  columns:
+    type: array
+    minItems: 2
+    maxItems: 2
+    items:
+      type: object
+      required: [name, match_percent, gist, media]
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        match_percent:
+          type: integer
+        gist:
+          type: string
+        media:
+          $ref: './destination-media.yaml'
+  metrics:
+    type: array
+    items:
+      type: object
+      required: [key, left, right, winner]
+      additionalProperties: false
+      properties:
+        key:
+          type: string
+        left:
+          type: string
+        right:
+          type: string
+        winner:
+          type: string
+          enum: [left, right, none]
+  differences:
+    type: array
+    items:
+      type: object
+      required: [name, text]
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        text:
+          type: string

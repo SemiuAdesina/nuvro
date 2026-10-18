@@ -1,0 +1,116 @@
+settings:
+  get:
+    operationId: getPersonalization
+    summary: Personalization settings, explicit preferences and learned influence
+    responses:
+      '200':
+        description: Personalization settings
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/personalization.yaml#/PersonalizationSettings'
+      default:
+        $ref: '../components/responses/problem.yaml'
+  patch:
+    operationId: patchPersonalization
+    summary: Turn learning from past trips on or off
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/personalization.yaml#/UpdatePersonalizationRequest'
+    responses:
+      '200':
+        description: Updated settings
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/personalization.yaml#/PersonalizationSettings'
+      default:
+        $ref: '../components/responses/problem.yaml'
+  delete:
+    operationId: clearPersonalization
+    summary: Clear learned preferences without touching trips or explicit settings
+    responses:
+      '204':
+        description: Learning cleared
+      default:
+        $ref: '../components/responses/problem.yaml'
+insights:
+  get:
+    operationId: listPersonalizationInsights
+    summary: What NUVRO has learned, as structured statements
+    responses:
+      '200':
+        description: Insights
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/personalization.yaml#/PersonalizationInsightList'
+      default:
+        $ref: '../components/responses/problem.yaml'
+insight:
+  parameters:
+    - name: insightId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+  patch:
+    operationId: patchPersonalizationInsight
+    summary: Confirm, dismiss or suppress a learned insight
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/personalization.yaml#/UpdateInsightRequest'
+    responses:
+      '200':
+        description: Updated insight
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/personalization.yaml#/PersonalizationInsight'
+      default:
+        $ref: '../components/responses/problem.yaml'
+feedback:
+  parameters:
+    - name: tripId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+  get:
+    operationId: getTripFeedback
+    summary: Feedback already given for this trip
+    responses:
+      '200':
+        description: Trip feedback
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/personalization.yaml#/TripFeedback'
+      default:
+        $ref: '../components/responses/problem.yaml'
+  put:
+    operationId: submitTripFeedback
+    summary: Give or revise feedback after a trip
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/personalization.yaml#/TripFeedbackRequest'
+    responses:
+      '200':
+        description: Stored feedback
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/personalization.yaml#/TripFeedback'
+      default:
+        $ref: '../components/responses/problem.yaml'

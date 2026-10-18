@@ -1,0 +1,199 @@
+Profile:
+  type: object
+  additionalProperties: false
+  required: [userId, preferredLanguage, locale, preferredCurrency, homeCountry, homeTimezone, departureAirport, units, hourCycle, accessibilityPreferences]
+  properties:
+    userId:
+      type: string
+      format: uuid
+    preferredLanguage:
+      type: string
+      pattern: '^[a-z]{2,3}(-[A-Za-z0-9]{2,8})*$'
+    locale:
+      type: string
+      pattern: '^[a-z]{2,3}(-[A-Za-z0-9]{2,8})*$'
+    preferredCurrency:
+      type: string
+      pattern: '^[A-Z]{3}$'
+    homeCountry:
+      type: [string, 'null']
+      pattern: '^[A-Z]{2}$'
+    homeTimezone:
+      type: [string, 'null']
+      minLength: 1
+      maxLength: 64
+      description: IANA timezone identifier
+    departureAirport:
+      type: [string, 'null']
+      pattern: '^[A-Z]{3}$'
+    units:
+      type: string
+      enum: [metric, imperial]
+    hourCycle:
+      type: string
+      enum: ['12', '24']
+    accessibilityPreferences:
+      type: array
+      maxItems: 20
+      items:
+        type: string
+        minLength: 1
+        maxLength: 40
+ProfilePatch:
+  type: object
+  additionalProperties: false
+  description: >-
+    Omitted fields are unchanged. homeCountry, homeTimezone and departureAirport accept
+    explicit null to clear. Other fields reject null.
+  properties:
+    preferredLanguage:
+      type: string
+      pattern: '^[a-z]{2,3}(-[A-Za-z0-9]{2,8})*$'
+    locale:
+      type: string
+      pattern: '^[a-z]{2,3}(-[A-Za-z0-9]{2,8})*$'
+    preferredCurrency:
+      type: string
+      pattern: '^[A-Z]{3}$'
+    homeCountry:
+      type: [string, 'null']
+      pattern: '^[A-Z]{2}$'
+    homeTimezone:
+      type: [string, 'null']
+      minLength: 1
+      maxLength: 64
+    departureAirport:
+      type: [string, 'null']
+      pattern: '^[A-Z]{3}$'
+    units:
+      type: string
+      enum: [metric, imperial]
+    hourCycle:
+      type: string
+      enum: ['12', '24']
+    accessibilityPreferences:
+      type: array
+      maxItems: 20
+      items:
+        type: string
+        minLength: 1
+        maxLength: 40
+Preferences:
+  type: object
+  additionalProperties: false
+  required: [travelStyle, weatherPreference, crowdPreference, maxFlightMinutes, tripPace, interests, travelingWithChildren, scope, entrySimplicity]
+  properties:
+    travelStyle:
+      type: array
+      maxItems: 20
+      items:
+        type: string
+        minLength: 1
+        maxLength: 40
+    weatherPreference:
+      type: string
+      enum: [any, warm, mild, cold]
+    crowdPreference:
+      type: string
+      enum: [any, quiet, lively]
+    maxFlightMinutes:
+      type: [integer, 'null']
+      minimum: 0
+      maximum: 2880
+    tripPace:
+      type: string
+      enum: [relaxed, balanced, packed]
+    interests:
+      type: array
+      maxItems: 50
+      items:
+        type: string
+        minLength: 1
+        maxLength: 40
+    travelingWithChildren:
+      type: boolean
+    scope:
+      type: string
+      enum: [any, domestic, international]
+    entrySimplicity:
+      type: string
+      enum: [any, simple]
+PreferencesPatch:
+  type: object
+  additionalProperties: false
+  description: Omitted fields are unchanged. Only maxFlightMinutes accepts explicit null.
+  properties:
+    travelStyle:
+      type: array
+      maxItems: 20
+      items:
+        type: string
+        minLength: 1
+        maxLength: 40
+    weatherPreference:
+      type: string
+      enum: [any, warm, mild, cold]
+    crowdPreference:
+      type: string
+      enum: [any, quiet, lively]
+    maxFlightMinutes:
+      type: [integer, 'null']
+      minimum: 0
+      maximum: 2880
+    tripPace:
+      type: string
+      enum: [relaxed, balanced, packed]
+    interests:
+      type: array
+      maxItems: 50
+      items:
+        type: string
+        minLength: 1
+        maxLength: 40
+    travelingWithChildren:
+      type: boolean
+    scope:
+      type: string
+      enum: [any, domestic, international]
+    entrySimplicity:
+      type: string
+      enum: [any, simple]
+
+AccountDeletionRequest:
+  type: object
+  additionalProperties: false
+  properties:
+    reason:
+      type: string
+      maxLength: 64
+      description: Optional short reason, chosen from a fixed list in the client, never free text about a person.
+
+AccountDeletion:
+  type: object
+  additionalProperties: false
+  required: [status, requestedAt, purgeAfter]
+  properties:
+    status:
+      type: string
+      enum: [pending, purged, failed]
+    requestedAt:
+      type: string
+      format: date-time
+    purgeAfter:
+      type: string
+      format: date-time
+      description: The instant after which stored data is erased. Access ends immediately at request time.
+    purgedAt:
+      type: string
+      format: date-time
+
+AppleIdentityLink:
+  type: object
+  additionalProperties: false
+  required: [authorizationCode]
+  properties:
+    authorizationCode:
+      type: string
+      minLength: 1
+      maxLength: 512
+      description: The single-use authorization code from ASAuthorizationAppleIDCredential, exchanged server side for a refresh token that is stored sealed and revoked when the account is deleted.

@@ -1,0 +1,17 @@
+get:
+  tags:
+    - Operations
+  operationId: getLiveness
+  summary: Report that the process is running
+  description: |
+    Returns success while the process is able to serve traffic. It never consults backing
+    services, so a dependency outage does not cause the process to be restarted.
+  responses:
+    '200':
+      description: The process is live.
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/liveness.yaml'
+    '500':
+      $ref: '../components/responses/internal-error.yaml'

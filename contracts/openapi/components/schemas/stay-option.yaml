@@ -1,0 +1,46 @@
+type: object
+title: StayOption
+description: |
+  A stay ranked for this traveller's trip. Recommendation labels come from NUVRO ranking, which
+  never considers affiliate commission. Rates are observed estimates, not live availability.
+required: [id, name, area, distance_note, nightly_rate, nights, rating, minutes_to_plans, recommendation, photo_reference, reasons, coordinate]
+additionalProperties: false
+properties:
+  id:
+    type: string
+  name:
+    type: string
+  area:
+    type: string
+  distance_note:
+    type: string
+  nightly_rate:
+    $ref: './money.yaml'
+  nights:
+    type: integer
+    minimum: 1
+  rating:
+    type: number
+    minimum: 0
+    maximum: 5
+  minutes_to_plans:
+    type: integer
+    minimum: 0
+  recommendation:
+    type: string
+    enum: [best_overall, best_value, best_location, best_premium]
+  photo_reference:
+    type: string
+  reasons:
+    type: array
+    items:
+      type: string
+  coordinate:
+    type: object
+    required: [latitude, longitude]
+    additionalProperties: false
+    properties:
+      latitude:
+        type: number
+      longitude:
+        type: number

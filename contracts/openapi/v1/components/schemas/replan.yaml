@@ -1,0 +1,86 @@
+ReplanRequest:
+  type: object
+  additionalProperties: false
+  required: [trigger]
+  properties:
+    trigger:
+      type: string
+      enum: [weather, late, tired, missed, closed, free_time, manual]
+    message:
+      type: string
+      maxLength: 500
+      description: Optional free text; deterministic evidence still decides the outcome
+    location:
+      $ref: './common.yaml#/GeoPoint'
+    language:
+      type: string
+      maxLength: 16
+ReplanChange:
+  type: object
+  additionalProperties: false
+  required: [kind, reasons]
+  properties:
+    kind:
+      type: string
+      enum: [replace, move, remove, add]
+    original:
+      $ref: './itinerary.yaml#/ItineraryItem'
+    proposed:
+      $ref: './itinerary.yaml#/ItineraryItem'
+    reasons:
+      type: array
+      maxItems: 10
+      items:
+        type: string
+        enum: [weather_conflict, place_closed, insufficient_travel_time, traveler_requested_lower_pace, missed_start_time, better_time_window, no_alternative_found]
+ReplanProposal:
+  type: object
+  additionalProperties: false
+  required: [tripId, trigger, itineraryVersion, changes, reasons, preservedConstraints, valid, createdAt, expiresAt]
+  properties:
+    id:
+      type: string
+      format: uuid
+    tripId:
+      type: string
+      format: uuid
+    trigger:
+      type: string
+      enum: [weather, late, tired, missed, closed, free_time, manual]
+    itineraryVersion:
+      type: integer
+      minimum: 1
+    changes:
+      type: array
+      maxItems: 10
+      items:
+        $ref: '#/ReplanChange'
+    reasons:
+      type: array
+      maxItems: 10
+      items:
+        type: string
+    preservedConstraints:
+      type: array
+      maxItems: 10
+      items:
+        type: string
+        enum: [locked_items, reservations, trip_dates, budget_ceiling, accessibility, travel_pace]
+    budgetDelta:
+      $ref: './money.yaml'
+    violations:
+      type: array
+      maxItems: 20
+      items:
+        $ref: './itinerary.yaml#/Violation'
+    valid:
+      type: boolean
+    summary:
+      type: string
+      maxLength: 300
+    createdAt:
+      type: string
+      format: date-time
+    expiresAt:
+      type: string
+      format: date-time

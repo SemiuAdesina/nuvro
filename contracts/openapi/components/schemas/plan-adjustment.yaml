@@ -1,0 +1,29 @@
+type: object
+title: PlanAdjustment
+description: |
+  A proposed change to one day, produced by the replanning engine over trusted weather,
+  reservation and routing facts. The reasoning is a concise traveller-facing explanation.
+required: [trigger, day_number, before, after, relocation_note, reasoning, preserved]
+additionalProperties: false
+properties:
+  trigger:
+    type: string
+    examples:
+      - It’s raining this afternoon.
+  day_number:
+    type: integer
+    minimum: 1
+  before:
+    $ref: './itinerary-day.yaml#/properties/activities/items'
+  after:
+    $ref: './itinerary-day.yaml#/properties/activities/items'
+  relocation_note:
+    type: string
+    examples:
+      - Botanical Garden moved to tomorrow at 10:30
+  reasoning:
+    type: string
+  preserved:
+    type: array
+    items:
+      type: string

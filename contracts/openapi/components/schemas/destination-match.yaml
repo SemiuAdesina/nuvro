@@ -1,0 +1,86 @@
+type: object
+title: DestinationMatch
+description: |
+  A destination ranked for one traveller request. Prices are estimates observed from providers
+  at ranking time, never live fares. Every dynamic value carries freshness at the response level.
+required:
+  - id
+  - name
+  - country
+  - region
+  - photo_reference
+  - score
+  - estimate
+  - weather
+  - flight
+  - duration_days
+  - pace
+  - tags
+  - reasons
+additionalProperties: false
+properties:
+  id:
+    type: string
+  name:
+    type: string
+    examples:
+      - Madeira
+  country:
+    type: string
+    examples:
+      - Portugal
+  region:
+    type: string
+    examples:
+      - Atlantic island
+  photo_reference:
+    type: string
+    description: Identifier of the destination photograph to render.
+  score:
+    $ref: './match-score.yaml'
+  estimate:
+    type: object
+    required: [low, high]
+    additionalProperties: false
+    properties:
+      low:
+        $ref: './money.yaml'
+      high:
+        $ref: './money.yaml'
+  weather:
+    type: object
+    required: [condition, temperature_celsius]
+    additionalProperties: false
+    properties:
+      condition:
+        type: string
+        examples:
+          - Warm
+      temperature_celsius:
+        type: integer
+  flight:
+    type: object
+    required: [stops, approximate_hours]
+    additionalProperties: false
+    properties:
+      stops:
+        type: integer
+        minimum: 0
+      approximate_hours:
+        type: integer
+        minimum: 0
+  duration_days:
+    type: integer
+    minimum: 1
+  pace:
+    type: string
+    examples:
+      - Easygoing
+  tags:
+    type: array
+    items:
+      type: string
+  reasons:
+    type: array
+    items:
+      $ref: './match-reason.yaml'

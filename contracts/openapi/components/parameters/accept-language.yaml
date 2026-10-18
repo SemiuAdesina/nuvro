@@ -1,0 +1,11 @@
+name: Accept-Language
+in: header
+required: false
+description: |
+  IETF BCP 47 language tags in preference order. Language is separate from locale and from
+  the traveller's home country. When absent the backend falls back to the language stored on
+  the traveller profile, and then to English.
+schema:
+  type: string
+  examples:
+    - en-GB, en;q=0.9, fr;q=0.8

@@ -1,0 +1,15 @@
+type: object
+title: Liveness
+required:
+  - status
+  - checked_at
+additionalProperties: false
+properties:
+  status:
+    type: string
+    enum:
+      - live
+  checked_at:
+    type: string
+    format: date-time
+    description: UTC RFC3339 instant at which the probe answered.

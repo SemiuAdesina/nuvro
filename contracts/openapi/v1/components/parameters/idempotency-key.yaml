@@ -1,0 +1,9 @@
+name: Idempotency-Key
+in: header
+required: true
+description: Client-generated key that makes a retry of this request safe; a repeat returns the original response
+schema:
+  type: string
+  minLength: 1
+  maxLength: 255
+  pattern: '^[A-Za-z0-9._:-]+$'

@@ -1,0 +1,29 @@
+type: object
+title: TripLibraryEntry
+description: One trip in the traveller's library, in any phase from planning to past.
+required: [id, destination_name, date_label, phase, progress, media]
+additionalProperties: false
+properties:
+  id:
+    type: string
+  destination_name:
+    type: string
+  date_label:
+    type: string
+  phase:
+    type: string
+    enum: [active, upcoming, planning, past]
+  progress:
+    type: number
+    minimum: 0
+    maximum: 1
+  readiness_label:
+    type: string
+  media:
+    $ref: './destination-media.yaml'
+  status_label:
+    type: string
+  weather_label:
+    type: string
+  next_label:
+    type: string

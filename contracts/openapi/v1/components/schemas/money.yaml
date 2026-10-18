@@ -1,0 +1,11 @@
+type: object
+additionalProperties: false
+required: [amountMinor, currency]
+properties:
+  amountMinor:
+    type: integer
+    format: int64
+  currency:
+    type: string
+    pattern: '^[A-Z]{3}$'
+    description: ISO 4217 alphabetic currency code
